@@ -1,0 +1,31 @@
+doctype html 
+html 
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="/admin/assets/css/style.css")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css")
+    link(rel="stylesheet", href="https://unpkg.com/filepond@^4/dist/filepond.css")
+    link(rel="stylesheet", href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css")
+    script(src="https://cdn.tiny.cloud/1/7n7wlxfit2x9eogbgw9i2d6h9ll9e35ffufq34a3457e71da/tinymce/7/tinymce.min.js" referrerpolicy="origin")
+    script(src="/admin/assets/js/tinymce-config.js")
+    title #{pageTitle}
+  body
+    //- Header
+    include ../partials/header.pug       
+    //- End header
+
+    //- Sider
+    include ../partials/sider.pug  
+    //- End Sider
+
+    main.main
+      block main
+
+    script(src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js")
+    script(src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js")
+    script(src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js")
+    script(src="https://unpkg.com/filepond@^4/dist/filepond.js")
+    script(src="https://cdn.jsdelivr.net/npm/chart.js")
+    script(src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js")
+    script(src="/admin/assets/js/script.js")

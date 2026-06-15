@@ -1,14 +1,36 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const database = require("./config/database");
+const clientRoutes = require("./routes/client/index.route");
+const adminRoutes = require("./routes/admin/index.route");
+const variableConfig = require("./config/variable");
 
 
 //config view engine pug
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-app.get("/", (req, res) => {
-  res.render("pages/index.pug");
-})
+//config public
+app.use(express.static(path.join(__dirname, "public")));
 
-app.listen(3333);
+// config dotenv
+require('dotenv').config()
+
+//variable locals
+app.locals.pathAdmin = variableConfig.pathAmin;
+
+// config database
+database.connect();
+
+
+// Cho phép data gửi lên dạng json
+app.use(express.json());
+
+//routes
+app.use("/", clientRoutes);
+app.use(`/${variableConfig.pathAmin}`, adminRoutes);
+
+
+
+app.listen(process.env.PORT);

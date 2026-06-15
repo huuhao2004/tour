@@ -1,0 +1,468 @@
+extends ../layouts/default.pug
+include ../mixins/product-item.pug
+
+block main 
+  // Section 1
+  .section-1
+    .container
+      .inner-wrap
+        h1.inner-title(
+          data-aos-delay="300" 
+          data-aos-duration="2000" 
+          data-aos="fade-up"
+          )
+          | Du lịch Châu Á - Khám phá Mỹ, Úc, Âu
+          br
+          | Đi nơi đâu bạn muốn
+        p.inner-desc
+          | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+          |   incididunt ut labore et dolore magna aliqua
+        form.inner-form
+          .inner-box.inner-address
+            .inner-input-group
+              img.inner-icon(
+                alt="address" 
+                src="/assets/images/address.jpg"
+                )
+              input.inner-input(
+                placeholder="Bạn muốn đi đâu" 
+                type="text"
+                )
+              i.fa-solid.fa-angle-down.inner-down
+            .inner-success
+              .inner-success-title
+                i.fa-solid.fa-location-dot
+                | Địa điểm hot
+              .inner-success-list
+                .inner-item
+                  .inner-item-image
+                    img(
+                      alt="" 
+                      src="/assets/images/product1.jpg"
+                      )
+                  .inner-item-content
+                    .inner-item-title Nhật Bản
+                    .inner-item-desc 50 tour
+                .inner-item
+                  .inner-item-image
+                    img(
+                      alt="" 
+                      src="/assets/images/product2.jpg"
+                      )
+                  .inner-item-content
+                    .inner-item-title Phú Quốc
+                    .inner-item-desc 50 tour
+                .inner-item
+                  .inner-item-image
+                    img(
+                      alt="" 
+                      src="/assets/images/product3.jpg"
+                      )
+                  .inner-item-content
+                    .inner-item-title Pháp
+                    .inner-item-desc 50 tour
+          .inner-box.inner-user
+            .inner-input-group
+              img.inner-icon(
+                alt="address" 
+                src="/assets/images/user.jpg"
+                )
+              input.inner-input(
+                readonly="" 
+                placeholder="Số lượng" 
+                type="text"
+                )
+              i.fa-solid.fa-angle-down.inner-down
+            .inner-quantity
+              .inner-item
+                .inner-label Người lớn
+                .inner-count
+                  span.inner-down -
+                  .inner-number 1
+                  span.inner-up +
+              .inner-item
+                .inner-label Trẻ em
+                .inner-count
+                  span.inner-down -
+                  .inner-number 1
+                  span.inner-up +
+              .inner-item
+                .inner-label Em bé
+                .inner-count
+                  span.inner-down -
+                  .inner-number 1
+                  span.inner-up +
+          .inner-box.inner-calendar
+            .inner-input-group
+              img.inner-icon(
+                alt="address" 
+                src="/assets/images/calendar.jpg"
+                )
+              input.inner-input(
+                placeholder="Lịch khởi hành" 
+                type="text"
+                )
+              i.fa-solid.fa-angle-down.inner-down
+          button.inner-button
+            i.fa-solid.fa-magnifying-glass
+            | Tìm kiếm
+  // End section 1
+  // Section 2
+  -
+    var productListSection2 = [
+      {
+        "avatar": "/assets/images/product1.jpg", 
+        "slug" : "",
+        "discount": 30,
+        "name" : "Hà Nội – Lào Cai – SaPa 4N3Đ",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 4,
+        "ratingTotal": 20,
+        "stock": 10
+      },
+      {
+        "avatar": "/assets/images/product2.jpg", 
+        "slug" : "",
+        "discount": 0,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 3,
+        "ratingTotal": 20,
+        "stock": 10
+      },
+      {
+        "avatar": "/assets/images/product3.jpg", 
+        "slug" : "",
+        "discount": 30,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 4,
+        "ratingTotal": 20,
+        "stock": 10
+      },
+      {
+        "avatar": "/assets/images/product1.jpg", 
+        "slug" : "",
+        "discount": 30,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 4,
+        "ratingTotal": 20,
+        "stock": 10
+      }
+    ]
+  .section-2(
+    data-aos-delay="300" 
+    data-aos-duration="2000" 
+    data-aos="fade-up"
+    )
+    .container
+      .inner-wrap
+        .inner-info
+          h2.inner-title
+            | ƯU ĐÃI 2024
+            br
+            | TOUR GIỜ CHÓT
+          p.inner-desc Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+          .inner-clock-title Kết thúc sau
+          .inner-clock-number(clock-expire="2026-06-10T17:30:00")
+            .inner-item
+              .inner-number 00
+              .inner-label Ngày
+            .inner-item
+              .inner-number 00
+              .inner-label Giờ
+            .inner-item
+              .inner-number 00
+              .inner-label Phút
+            .inner-item
+              .inner-number 00
+              .inner-label Giây
+          .inner-discount-title GIẢM ĐẾN
+          .inner-discount-price
+            | 990.000
+            span.inner-unit đ
+        .inner-list
+          .swiper.swiper-section-2
+            .swiper-wrapper
+              each item in productListSection2
+                .swiper-slide
+                  +product-item(item)
+              
+  // End section 2
+  // Section 3
+  .section-3(
+    data-aos-duration="2000" 
+    data-aos="fade-up"
+    )
+    .container
+      h2.box-title Khuyến Mại Bùng Nổ - Đánh Tan Nóng Bức
+      .swiper.swiper-section-3
+        .swiper-wrapper
+          .swiper-slide
+            .inner-item
+              a(href="#")
+                img(
+                  alt="" 
+                  src="/assets/images/banner1.jpg"
+                  )
+          .swiper-slide
+            .inner-item
+              a(href="#")
+                img(
+                  alt="" 
+                  src="/assets/images/banner2.jpg"
+                  )
+          .swiper-slide
+            .inner-item
+              a(href="#")
+                img(
+                  alt="" 
+                  src="/assets/images/banner3.jpg"
+                  )
+          .swiper-slide
+            .inner-item
+              a(href="#")
+                img(
+                  alt="" 
+                  src="/assets/images/banner3.jpg"
+                  )
+          .swiper-slide
+            .inner-item
+              a(href="#")
+                img(
+                  alt="" 
+                  src="/assets/images/banner3.jpg"
+                  )
+        .swiper-pagination
+  // End Section 3
+  // Section 4
+  -
+    var productListSection4 = [
+      {
+        "avatar": "/assets/images/product1.jpg", 
+        "slug" : "",
+        "discount": 30,
+        "name" : "Hà Nội – Lào Cai – SaPa 4N3Đ",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 4,
+        "ratingTotal": 20,
+        "stock": 10
+      },
+      {
+        "avatar": "/assets/images/product2.jpg", 
+        "slug" : "",
+        "discount": 0,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 3,
+        "ratingTotal": 20,
+        "stock": 10
+      },
+      {
+        "avatar": "/assets/images/product3.jpg", 
+        "slug" : "",
+        "discount": 30,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 4,
+        "ratingTotal": 20,
+        "stock": 10
+      },
+      {
+        "avatar": "/assets/images/product1.jpg", 
+        "slug" : "",
+        "discount": 30,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 4,
+        "ratingTotal": 20,
+        "stock": 10
+      }
+    ]
+  .section-4
+    .container
+      .box-title Tour Trong nước
+      .inner-wrap
+        each item in productListSection4
+          +product-item(item)
+      .inner-button
+        a.button-outline(href="#") Xem tất cả
+  // End section 4
+
+
+  // Section 5
+  .section-5
+    .container
+      .inner-image
+        a(href="#")
+          img(
+            alt="" 
+            src="/assets/images/banner4.jpg"
+            )
+  // End Section 5
+
+  
+  // Section 6
+  -
+    var productListSection6 = [
+      {
+        "avatar": "/assets/images/product2.jpg", 
+        "slug" : "",
+        "discount": 0,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 3,
+        "ratingTotal": 20,
+        "stock": 10
+      },
+      {
+        "avatar": "/assets/images/product3.jpg", 
+        "slug" : "",
+        "discount": 30,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 4,
+        "ratingTotal": 20,
+        "stock": 10
+      },
+      {
+        "avatar": "/assets/images/product1.jpg", 
+        "slug" : "",
+        "discount": 30,
+        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
+        "priceOld" : 13650000,
+        "priceNew": 2590000,
+        "code" : "TOUR000001",
+        "departureDate": "22/07/2024",
+        "time": "10 Ngày 9 Đêm",
+        "ratingStar": 4,
+        "ratingTotal": 20,
+        "stock": 10
+      }
+    ]
+  .section-6
+    .container
+      .box-title Tour Nước Ngoài
+      .inner-wrap
+        each item in productListSection6
+          +product-item(item)
+      .inner-button
+        a.button-outline(href="#") Xem tất cả
+  // End section 6
+
+
+  // Section 7
+  .section-7
+    .container
+      .inner-image
+        a(href="#")
+          img(
+            alt="" 
+            src="/assets/images/banner5.jpg"
+            )
+  // End Section 7
+
+
+  // Section 8
+  .section-8
+    .container
+      h2.box-title Tin tức mới
+      .inner-wrap
+        .blog-item
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src="/assets/images/blog-1.jpg"
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Homestay “cổ tích” giữa Đà Lạt mộng mơ
+        .blog-item-2
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src="/assets/images/blog-2.jpg"
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Top 5 điểm check in độc đáo tại Singapore
+              .inner-desc
+                | Nếu bạn nghĩ du lịch Singapore rất nhàm chán vì chỉ mãi quanh quẩn trong những khối bê tông vô cảm thì
+                |   bạn “chắc chưa?”.
+                |   Tuy đảo quốc Sư Tử không phải là một quốc gia rộng lớn nhưng các địa điểm du lịch tại Singapore chưa
+                |   từng đánh mất sức
+                |   hút đối với cộng đồng xê dịch quốc tế.
+        .blog-item
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src="/assets/images/blog-3.jpg"
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Đặc sản không thể bỏ qua khi đến với Đà Nẵng – Hội An
+        .blog-item
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src="/assets/images/blog-4.jpg"
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Đảo Phú Quý Bình Thuận hot trend năm 2024
+        .blog-item
+          a(href="#")
+            .inner-image
+              img(
+                alt="" 
+                src="/assets/images/blog-5.jpg"
+                )
+            .inner-content
+              .inner-date 23/05/2024
+              h3.inner-title Trekking cắm trại tại Đà Lạt- Cảm nhận Đà Lạt qua từng bước chân
+  // End Section 8
