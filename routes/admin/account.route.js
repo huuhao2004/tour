@@ -1,19 +1,24 @@
 const router = require("express").Router();
-const accountcontroller = require("../../controller/admin/account.controller");
+const accountController = require("../../controller/admin/account.controller");
+const accountValidate = require("../../validates/admin/account.validate");
 
-router.get("/login", accountcontroller.login);
+router.get("/login", accountController.login);
 
-router.get("/register", accountcontroller.register)
+router.post("/login", accountValidate.loginPost, accountController.loginPost);
 
-router.post("/register", accountcontroller.registerPost)
+router.get("/register", accountController.register);
 
-router.get("/register-initial", accountcontroller.registerInitial)
+router.post("/register", accountValidate.registerPost, accountController.registerPost);
 
-router.get("/forgot-password", accountcontroller.forgotPassword);
+router.get("/register-initial", accountController.registerInitial);
 
-router.get("/otp-password", accountcontroller.otpPassword);
+router.get("/forgot-password", accountController.forgotPassword);
 
-router.get("/reset-password", accountcontroller.resetPassword);
+router.get("/otp-password", accountController.otpPassword);
+
+router.get("/reset-password", accountController.resetPassword);
+
+router.post("/logout", accountController.logoutPost);
 
 
 module.exports = router;

@@ -598,3 +598,21 @@ if (sider) {
   })
 }
 // End sider
+
+// Logout
+const buttonLogout = document.querySelector(".sider .inner-logout");
+if (buttonLogout) {
+  buttonLogout.addEventListener("click", () => {
+    const fetchApi = async () => {
+      const response = await fetch(`/${pathAdmin}/account/logout`, {
+        method: "POST"
+      })
+      const result = await response.json();
+      if (result.code == "success") {
+        window.location.href = `/${pathAdmin}/account/login`;
+      }
+    }
+    fetchApi();
+  })
+}
+// End Logout

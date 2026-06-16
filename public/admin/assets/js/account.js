@@ -23,7 +23,28 @@ if (loginForm) {
       const email = event.target.email.value;
       const password = event.target.password.value;
       const rememberPassword = event.target.rememberPassword.checked;
-      console.log(rememberPassword);
+      
+      const dataFinal = {
+        email,
+        password
+      }
+      const fetchApi = async () => {
+        const response = await fetch("/admin/account/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataFinal)
+        });
+        const result = await response.json(); // chuyen data tu json sang js
+        if (result.code == "error") {
+          alert(result.message);
+        }
+        else if (result.code == "success") {
+          window.location.href = "/admin/dashboard"
+        }
+      }
+      fetchApi();
     });
 }
 // End login form
@@ -104,7 +125,7 @@ if (registerForm) {
           password,
         };
         const fetchApi = async () => {
-          const response = await fetch("/admin/account/register", {
+          const response = await fetch(`/${pathAdmin}/account/register`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -115,7 +136,7 @@ if (registerForm) {
           if (result.code == "error") {
             alert(result.message);
           } else {
-            window.location.href = "/admin/account/register-initial"
+            window.location.href = `/${pathAdmin}/account/register-initial`;
           }
         };
         fetchApi();
