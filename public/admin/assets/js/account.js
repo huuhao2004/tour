@@ -26,8 +26,9 @@ if (loginForm) {
       
       const dataFinal = {
         email,
-        password
-      }
+        password,
+        rememberPassword,
+      };
       const fetchApi = async () => {
         const response = await fetch("/admin/account/login", {
           method: "POST",
@@ -163,7 +164,29 @@ if (forgotPasswordForm) {
     ])
     .onSuccess((event) => {
       const email = event.target.email.value;
-      console.log(email);
+      
+      const dataFinal = {
+        email
+      };
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/account/forgot-password`, {
+          method: "POST",
+          headers: {
+            "Content-type" : "application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        })
+        const result = await response.json();
+        if (result.code == "success") {
+          window.location.href = `/${pathAdmin}/account/otp-password`;
+        }
+        else {
+          alert(result.message);
+        }
+      }
+      fetchApi();
+
     });
 }
 // End Forgot Password Form
