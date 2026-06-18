@@ -179,7 +179,7 @@ if (forgotPasswordForm) {
         })
         const result = await response.json();
         if (result.code == "success") {
-          window.location.href = `/${pathAdmin}/account/otp-password`;
+          window.location.href = `/${pathAdmin}/account/otp-password?email=${email}`;
         }
         else {
           alert(result.message);
@@ -205,6 +205,32 @@ if (otpPasswordForm) {
     ])
     .onSuccess((event) => {
       const otp = event.target.otp.value;
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get("email");
+
+      const dataFinal = {
+        otp,
+        email
+      }
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/account/otp-password`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        })
+        const result = await response.json();
+
+        if (result.code == "error") {
+          alert(result.message);
+        }
+        else {
+          window.location.href = `/${pathAdmin}/account/reset-password`;
+        }
+      }
+      fetchApi();
     });
 }
 // End otp Password Form
@@ -256,7 +282,29 @@ if (resetPasswordForm) {
     ])
     .onSuccess((event) => {
       const password = event.target.password.value;
-      console.log(password);
+      
+      const dataFinal = {
+        password,
+      };
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/account/reset-password`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataFinal),
+        });
+        const result = await response.json();
+
+        if (result.code == "error") {
+          alert(result.message);
+        } else {
+          window.location.href = `/${pathAdmin}/dashboard`;
+        }
+      };
+      fetchApi();
+
     });
 }
 // End reset password form

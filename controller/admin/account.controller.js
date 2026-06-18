@@ -179,11 +179,74 @@ module.exports.otpPassword = (req, res) => {
   });
 };
 
+module.exports.otpPasswordPost = async (req, res) => {
+  const { email, otp } = req.body;
+
+  const exitsRecord = await ForgotPassword.findOne({
+    otp: otp,
+    email: email,
+  });
+
+  if (!exitsRecord) {
+    res.json({
+      code: "error",
+      message: "Mã OTP không chính xác!",
+    });
+    return;
+  }
+
+  const exitsAccount = await AccountAdmin.findOne({
+    email: email
+  })
+
+  //jwt
+  const token = jwt.sign(
+    {
+      id: exitsAccount._id,
+      email: exitsAccount.email,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1d",
+    },
+  );
+
+  res.cookie("token", token, {
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true, //chỉ cho phép server được truy cập cookie này
+    sameSit: "strict", // không gửi đc yêu cầu từ website khác
+  });
+
+  res.json({
+    code: "success",
+    message: "Xác thực OTP thành công!",
+  });
+};;
+
 module.exports.resetPassword = (req, res) => {
   res.render("admin/pages/reset-password.pug", {
     pageTitle: "Đổi mật khẩu",
   });
 };
+
+module.exports.resetPasswordPost = async (req, res) => {
+  const { password } = req.body;
+
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);
+
+  await AccountAdmin.updateOne({
+    _id: req.account._id
+  }, {
+    password: hashPassword
+  })
+
+  res.json({
+    code: "success",
+    message: "Đổi mật khẩu thành công!",
+  });
+};
+
 
 module.exports.logoutPost = (req, res) => {
   res.clearCookie("token");
