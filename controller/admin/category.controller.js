@@ -1,9 +1,31 @@
 const Category = require("../../models/category.model");
 const categoryHelper = require("../../helpers/category.helper");
+const AccountAdmin = require("../../models/account-admin.model");
+const moment = require("moment");
 
-module.exports.list = (req, res) => {
+module.exports.list = async (req, res) => {
+  const categoryList = await Category.find({
+    deleted: false
+  }).sort({
+    position: "desc"
+  })
+
+  for (const item of categoryList) {
+    if (item.createdBy) {
+      const infoAccountCreated = await AccountAdmin.findById(item.createdBy);
+      item.createdByFullName = infoAccountCreated.fullName;
+    }
+    if (item.updatedBy) {
+      const infoAccountUpdated = await AccountAdmin.findById(item.updatedBy);
+      item.updatedByFullName = infoAccountUpdated.fullName;
+    }
+    item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY");
+    item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY");
+  }
+
   res.render("admin/pages/category-list.pug", {
     pageTitle: "Quản lý danh mục",
+    categoryList: categoryList
   });
 };
 
@@ -40,6 +62,8 @@ module.exports.createPost = async (req, res) => {
 
   const newRecord = new Category(req.body);
   await newRecord.save();
+
+  req.flash("success", "Tạo danh mục thành công!");
 
   res.json({
     code: "success",

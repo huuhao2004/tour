@@ -9,6 +9,8 @@ const clientRoutes = require("./routes/client/index.route");
 const adminRoutes = require("./routes/admin/index.route");
 const variableConfig = require("./config/variable");
 const cookieParser = require("cookie-parser");
+const flash = require('express-flash');
+const session = require("express-session");
 
 //config view engine pug
 app.set("view engine", "pug");
@@ -18,7 +20,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 //set cookie-parser
-app.use(cookieParser());
+app.use(cookieParser("akhdkasjbdfas"));
 
 //variable locals , biến này chỉ dùng đc trong file pug
 app.locals.pathAdmin = variableConfig.pathAdmin;
@@ -31,6 +33,10 @@ database.connect();
 
 // Cho phép data gửi lên dạng json
 app.use(express.json());
+
+//Hiển thị thông báo sau khi load lại trang 
+app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(flash());
 
 //routes
 app.use("/", clientRoutes);

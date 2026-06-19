@@ -18,6 +18,10 @@ const categorySchema = new mongoose.Schema(
     description: String,
     createdBy: String,
     updatedBy: String,
+    status: {
+      type: String,
+      default: "active"
+    },
     deleted: {
       type: Boolean,
       default: false
