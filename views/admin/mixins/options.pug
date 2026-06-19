@@ -1,0 +1,6 @@
+mixin options(list, level = 0)
+  each item in list
+    - const prefix = "--".repeat(level);
+    option(value=item._id) #{prefix} #{item.name}
+    if (item.children && item.children.length)
+      +options(item.children, level +1 ) 

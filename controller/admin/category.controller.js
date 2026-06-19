@@ -1,4 +1,5 @@
 const Category = require("../../models/category.model");
+const categoryHelper = require("../../helpers/category.helper");
 
 module.exports.list = (req, res) => {
   res.render("admin/pages/category-list.pug", {
@@ -6,9 +7,18 @@ module.exports.list = (req, res) => {
   });
 };
 
-module.exports.create = (req, res) => {
+module.exports.create = async (req, res) => {
+  const categoryList = await Category.find({ deleted: false });
+
+  const categoryTree = categoryHelper(categoryList, "");
+
+  // res.json({
+  //   categoryTree: categoryTree,
+  // });
+
   res.render("admin/pages/category-create.pug", {
     pageTitle: "Tạo danh mục",
+    categoryTree: categoryTree,
   });
 };
 

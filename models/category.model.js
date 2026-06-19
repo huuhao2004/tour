@@ -1,15 +1,23 @@
+const { types } = require("joi");
 const mongoose = require("mongoose");
+const slug = require('mongoose-slug-updater');
+  
+mongoose.plugin(slug);
 
 const categorySchema = new mongoose.Schema(
   {
     name: String,
+    slug: {
+      type: String,
+      slug: "name",
+      unique: true
+    },
     parent: String,
     position: Number,
     avatar: String,
     description: String,
     createdBy: String,
     updatedBy: String,
-    slug: String,
     deleted: {
       type: Boolean,
       default: false
