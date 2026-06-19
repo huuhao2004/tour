@@ -1,3 +1,6 @@
+// config dotenv
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -16,9 +19,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //set cookie-parser
 app.use(cookieParser());
-
-// config dotenv
-require("dotenv").config();
 
 //variable locals , biến này chỉ dùng đc trong file pug
 app.locals.pathAdmin = variableConfig.pathAdmin;

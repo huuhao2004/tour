@@ -157,12 +157,35 @@ if (categoryCreateForm) {
       const avatars = filePond.avatar.getFiles();
       const description = tinymce.get("description").getContent();
       let avatar = null;
-      if (avatars.legend > 0) {
+      if (avatars.length > 0) {
         avatar = avatars[0].file;
       }
-      console.log(name);
-      console.log(filePond);
-      console.log(description);
+
+      //tạo formdata
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("parent", parent);
+      formData.append("position", position);
+      formData.append("status", status);
+      formData.append("avatar", avatar);
+      formData.append("description", description);
+
+      
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/category/create`, {
+          method: "POST",
+          body: formData
+        })
+        const result = await response.json();
+        if (result.code == "error") {
+          alert(result.message);
+        }
+        else {
+          window.location.href = `/${pathAdmin}/category/list`;
+        }
+      }
+      fetchApi();
+
     });
 }
 
