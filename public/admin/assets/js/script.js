@@ -851,5 +851,13 @@ if (filterEndDate) {
 // End filter end date
 
 // Filter reset
-const filerReset = document.querySelector("[]")
+const filerReset = document.querySelector("[filter-reset]");
+if (filerReset) {
+  const url = new URL(window.location.href);
+  
+  filerReset.addEventListener("click", () => {
+    url.search = "";
+    window.location.href = url;
+  })
+}
 // End filter reset
