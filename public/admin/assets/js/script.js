@@ -760,3 +760,96 @@ if (listButtonDelete.length > 0) {
   })
 }
 // End button delete
+
+// Filter status
+const filterStatus = document.querySelector("[filter-status]");
+if (filterStatus) {
+  const url = new URL(window.location.href);
+  //lang nghe su kien thay doi
+  filterStatus.addEventListener("change", () => {
+    const value = filterStatus.value;
+    if (value) {
+      url.searchParams.set("status", value);
+    } else {
+      url.searchParams.delete("status");
+    }
+    window.location.href = url;
+  })
+
+  const valueCurrent = url.searchParams.get("status");
+  if (valueCurrent) {
+    filterStatus.value = valueCurrent;
+  }
+
+}
+// End filter status
+
+// Filter craeted by
+const filterCreatedBy = document.querySelector("[filter-created-by]");
+if (filterCreatedBy) {
+  const url = new URL(window.location.href);
+
+  filterCreatedBy.addEventListener("change", () => {
+    const value = filterCreatedBy.value;
+    if (value) {
+      url.searchParams.set("createdBy", value);
+    } else {
+      url.searchParams.delete("createdBy");
+    }
+    window.location.href = url;
+  })
+
+  const valueCurrent = url.searchParams.get("createdBy");
+  if (valueCurrent) {
+    filterCreatedBy.value = valueCurrent;
+  }
+}
+// End filter created by
+
+// Filter start date
+const filterStartDate = document.querySelector("[filter-start-date]");
+if (filterStartDate) {
+  const url = new URL(window.location.href);
+
+  filterStartDate.addEventListener("change", () => {
+    const value = filterStartDate.value;
+    if (value) {
+      url.searchParams.set("startDate", value);
+    } else {
+      url.searchParams.delete("startDate");
+    }
+    window.location.href = url;
+  });
+
+  const valueCurrent = url.searchParams.get("startDate");
+  if (valueCurrent) {
+    filterStartDate.value = valueCurrent;
+  }
+}
+// End filter start date
+
+// Filter end date
+const filterEndDate = document.querySelector("[filter-end-date]");
+if (filterEndDate) {
+  const url = new URL(window.location.href);
+
+  filterEndDate.addEventListener("change", () => {
+    const value = filterEndDate.value;
+    if (value) {
+      url.searchParams.set("endDate", value);
+    } else {
+      url.searchParams.delete("endDate");
+    }
+    window.location.href = url;
+  });
+
+  const valueCurrent = url.searchParams.get("endDate");
+  if (valueCurrent) {
+    filterEndDate.value = valueCurrent;
+  }
+}
+// End filter end date
+
+// Filter reset
+const filerReset = document.querySelector("[]")
+// End filter reset

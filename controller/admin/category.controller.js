@@ -4,9 +4,35 @@ const AccountAdmin = require("../../models/account-admin.model");
 const moment = require("moment");
 
 module.exports.list = async (req, res) => {
-  const categoryList = await Category.find({
+  const find = {
     deleted: false,
-  }).sort({
+  };
+
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+
+  if (req.query.createdBy) {
+    find.createdBy = req.query.createdBy;
+  }
+
+  // lọc theo ngày tạo
+  const dataFilter = {};
+  if (req.query.startDate) {
+    const startDate = moment(req.query.startDate).startOf("day").toDate();
+    dataFilter.$gte = startDate;
+  }
+  if (req.query.endDate) {
+    const endDate = moment(req.query.endDate).endOf("day").toDate();
+    dataFilter.$lte = endDate;
+  }
+  if (Object.keys(dataFilter).length > 0) {
+    find.createdAt = dataFilter
+  }
+
+  // end lọc theo ngày tạo
+
+  const categoryList = await Category.find(find).sort({
     position: "desc",
   });
 
@@ -23,9 +49,15 @@ module.exports.list = async (req, res) => {
     item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY");
   }
 
+  // danh sách tài khoản quản trị
+  const accountAdminList = await AccountAdmin.find({}).select("_id fullName");
+
+  // end danh sách tài khoản quản trị
+
   res.render("admin/pages/category-list.pug", {
     pageTitle: "Quản lý danh mục",
     categoryList: categoryList,
+    accountAdminList: accountAdminList
   });
 };
 
