@@ -729,3 +729,34 @@ if (alertTime) {
   }, time)
 }
 // End alert
+
+// Button Delete
+const listButtonDelete = document.querySelectorAll("[button-delete]");
+if (listButtonDelete.length > 0) {
+  listButtonDelete.forEach(button => {
+    button.addEventListener("click", () => {
+      const dataApi = button.getAttribute("data-api");
+
+      const isConfirm = confirm("Bạn có chắc chắn muốn xóa không?");
+
+      if (!isConfirm) {
+        return;
+      }
+
+      const fetchApi = async () => {
+        const response = await fetch(dataApi, {
+          method: "PATCH",
+        })
+        const result = await response.json();
+        if (result.code == "error") {
+          alert(result.message);
+        }
+        if (result.code == "success") {
+          window.location.reload();
+        }
+      }
+      fetchApi();
+    })
+  })
+}
+// End button delete

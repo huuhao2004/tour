@@ -30,7 +30,7 @@ module.exports.list = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const categoryList = await Category.find({ deleted: false });
+  const categoryList = await Category.find({  });
 
   const categoryTree = categoryHelper(categoryList, "");
 
@@ -129,3 +129,27 @@ module.exports.editPatch = async (req, res) => {
     });
   } catch (error) {}
 };
+
+module.exports.deletePatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await Category.updateOne({
+      _id: id
+    }, {
+      deleted: true,
+      deletedBy: req.account._id,
+      deletedAt: Date.now()
+    })
+
+    req.flash("success", "Xóa danh mục thành công!");
+
+    res.json({
+      code: "success",
+      message: "Xóa danh mục thành công!",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+

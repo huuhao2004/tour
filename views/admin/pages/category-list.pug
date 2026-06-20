@@ -85,7 +85,11 @@ block main
                 .inner-buttons 
                   a(class="inner-edit" href=`/${pathAdmin}/category/edit/${item._id}`) 
                     <i class="fa-regular fa-pen-to-square"></i>
-                  button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
+                  button(
+                    class="inner-delete" 
+                    button-delete
+                    data-api  = `/${pathAdmin}/category/delete/${item._id}`
+                  ) <i class="fa-regular fa-trash-can"></i>
   //- End section 6
 
   //- Section 7 
