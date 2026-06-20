@@ -10,6 +10,10 @@ router.get("/list", categoryController.list);
 
 router.get("/create", categoryController.create);
 
-router.post("/create", upload.single('avatar'), categoryValidate.createPost , categoryController.createPost);
+router.post("/create", upload.single('avatar'), categoryValidate.createPost, categoryController.createPost);
+
+router.get("/edit/:id", categoryController.edit);
+
+router.patch("/edit/:id", upload.single('avatar'), categoryValidate.editPatch, categoryController.editPatch);
 
 module.exports = router;

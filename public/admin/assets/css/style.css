@@ -826,7 +826,7 @@ a{
   background-color: #FAFBFD;
 }
 
-.table-2 table tbody tr td .inner-buttons button{
+.table-2 table tbody tr td .inner-buttons button, .table-2 table tbody tr td .inner-buttons a{
   font-size: 15px;
   padding: 8.5px 16.5px;
   border: 0;
@@ -836,7 +836,7 @@ a{
   border-right: 1px solid #D5D5D5;
 }
 
-.table-2 table tbody tr td .inner-buttons button:last-child{
+.table-2 table tbody tr td .inner-buttons button:last-child, .table-2 table tbody tr td .inner-buttons a:last-child{
   border-right: 0;
 }
 

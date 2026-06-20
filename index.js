@@ -35,7 +35,7 @@ database.connect();
 app.use(express.json());
 
 //Hiển thị thông báo sau khi load lại trang 
-app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(session({ cookie: { maxAge: 1000 } }));
 app.use(flash());
 
 //routes

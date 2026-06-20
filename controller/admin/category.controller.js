@@ -5,10 +5,10 @@ const moment = require("moment");
 
 module.exports.list = async (req, res) => {
   const categoryList = await Category.find({
-    deleted: false
+    deleted: false,
   }).sort({
-    position: "desc"
-  })
+    position: "desc",
+  });
 
   for (const item of categoryList) {
     if (item.createdBy) {
@@ -25,7 +25,7 @@ module.exports.list = async (req, res) => {
 
   res.render("admin/pages/category-list.pug", {
     pageTitle: "Quản lý danh mục",
-    categoryList: categoryList
+    categoryList: categoryList,
   });
 };
 
@@ -45,7 +45,6 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
-  
   if (req.body.position) {
     req.body.position = parseInt(req.body.position);
   } else {
@@ -69,4 +68,64 @@ module.exports.createPost = async (req, res) => {
     code: "success",
     message: "Tạo danh mục thành công!",
   });
+};
+
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const categoryDetail = await Category.findOne({
+      _id: id,
+      deleted: false,
+    });
+
+    const categoryList = await Category.find({ deleted: false });
+
+    const categoryTree = categoryHelper(categoryList, "");
+
+    res.render("admin/pages/category-edit.pug", {
+      pageTitle: "Chỉnh sửa danh mục",
+      categoryTree: categoryTree,
+      categoryDetail: categoryDetail,
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect(`/${pathAdmin}/category/list`);
+  }
+};
+
+module.exports.editPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      const countCategory = await Category.countDocuments();
+      req.body.position = countCategory + 1;
+    }
+
+    req.body.updatedBy = req.account._id;
+
+    if (req.file) {
+      req.body.avatar = req.file.path;
+    } else {
+      delete req.body.avatar; // xóa req.body.avatar khỏi req.body đẻ khỏi cập nhật thành ""
+    }
+
+    await Category.updateOne(
+      {
+        _id: id,
+        deleted: false,
+      },
+      req.body,
+    );
+
+    req.flash("success", "Cập nhật danh mục thành công!");
+
+    res.json({
+      code: "success",
+      message: "Cập nhật danh mục thành công!",
+    });
+  } catch (error) {}
 };
