@@ -861,3 +861,65 @@ if (filerReset) {
   })
 }
 // End filter reset
+
+// Check all
+const checkAll = document.querySelector("[check-all]");
+if (checkAll) {
+  checkAll.addEventListener("click", () => {
+    const listItem = document.querySelectorAll("[check-item]");
+    if (checkAll.checked) {
+      listItem.forEach(item => {
+        item.checked = true;
+      })
+    }
+    else {
+      listItem.forEach((item) => {
+        item.checked = false;
+      });
+    }
+  })
+}
+// End check all
+
+// Change multi
+const changeMulti = document.querySelector("[change-multi]");
+if (changeMulti) {
+  const select = changeMulti.querySelector("select");
+  const button = changeMulti.querySelector("button");
+
+  button.addEventListener("click", () => { 
+    const option = select.value;
+    const listInputChecked = document.querySelectorAll("[check-item]:checked");
+    if (option && listInputChecked.length > 0) {
+      const ids = [];
+      listInputChecked.forEach(item => {
+        ids.push(item.getAttribute("check-item"))
+      })
+      const dataFinal = {
+        option: option,
+        ids: ids
+      };
+
+      const dataApi = changeMulti.getAttribute("data-api");
+      
+      const fetchApi = async () => {
+        const response = await fetch(dataApi, {
+          method: "PATCH",
+          headers: {
+            "Content-Type" : "application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        })
+        const result = await response.json();
+        if (result.code == "error") {
+          alert(result.message);
+        }
+        else {
+          window.location.reload();
+        }
+      }
+      fetchApi();
+    }
+  })
+}
+// End change multi

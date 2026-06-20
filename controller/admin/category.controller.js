@@ -185,3 +185,39 @@ module.exports.deletePatch = async (req, res) => {
   }
 };
 
+module.exports.changeMulti = async (req, res) => {
+  try {
+    const { ids, option } = req.body;
+
+    if (option == "active" || option == "inactive") {
+      await Category.updateMany(
+        {
+          _id: { $in: ids },
+        },
+        {
+          status: option
+        },
+      );
+      req.flash("success", "Thay đổi trạng thái danh mục thành công!");
+    } else if (option == "delete") {
+      await Category.updateMany(
+        {
+          _id: { $in: ids },
+        },
+        {
+          deleted: true,
+          deletedAt: Date.now(),
+          deletedBy: req.account._id,
+        },
+      );
+      req.flash("success", "Xóa danh mục thành công!");
+    }
+    res.json({
+      code: "success",
+      message: "Thay đổi trạng thái thành công!",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
