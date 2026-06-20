@@ -2,6 +2,7 @@ const Category = require("../../models/category.model");
 const categoryHelper = require("../../helpers/category.helper");
 const AccountAdmin = require("../../models/account-admin.model");
 const moment = require("moment");
+const slugify = require("slugify");
 
 module.exports.list = async (req, res) => {
   const find = {
@@ -31,6 +32,16 @@ module.exports.list = async (req, res) => {
   }
 
   // end lọc theo ngày tạo
+
+  //search
+  if (req.query.keyword) {
+    const keyword = slugify(req.query.keyword, {
+      lower: true
+    });
+    const keywordRegex = new RegExp(keyword);
+    find.slug = keywordRegex;
+  }
+  // end search
 
   const categoryList = await Category.find(find).sort({
     position: "desc",
