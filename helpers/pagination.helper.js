@@ -2,7 +2,7 @@
 module.exports = (query, countRecord) => {
   const objectPagination = {
     currentPage: 1,
-    limitItem: 2,
+    limitItem: 4,
   };
 
 
