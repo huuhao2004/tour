@@ -3,6 +3,7 @@ const categoryHelper = require("../../helpers/category.helper");
 const AccountAdmin = require("../../models/account-admin.model");
 const moment = require("moment");
 const slugify = require("slugify");
+const paginationHelper = require("../../helpers/pagination.helper");
 
 module.exports.list = async (req, res) => {
   const find = {
@@ -43,9 +44,14 @@ module.exports.list = async (req, res) => {
   }
   // end search
 
+  // pagintaion
+  const countCategory = await Category.countDocuments({ deleted: false });
+  const objectPagination = paginationHelper(req.query, countCategory);
+  // end pagination
+
   const categoryList = await Category.find(find).sort({
     position: "desc",
-  });
+  }).skip(objectPagination.skip).limit(objectPagination.limitItem);
 
   for (const item of categoryList) {
     if (item.createdBy) {
@@ -68,7 +74,8 @@ module.exports.list = async (req, res) => {
   res.render("admin/pages/category-list.pug", {
     pageTitle: "Quản lý danh mục",
     categoryList: categoryList,
-    accountAdminList: accountAdminList
+    accountAdminList: accountAdminList,
+    objectPagination: objectPagination
   });
 };
 

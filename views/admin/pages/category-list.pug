@@ -94,9 +94,11 @@ block main
 
   //- Section 7 
   .section-7 
-    span(class="inner-label") Hiện thị 1 - 9 của 78
-    select(class="inner-pagination")
-      option Trang 1
-      option Trang 2
-      option Trang 3
+    - const start = objectPagination.skip + 1;
+    - const end = Math.min(objectPagination.skip + objectPagination.limitItem, objectPagination.totalRecord);
+
+    span(class="inner-label") Hiển thị #{start} - #{end} của #{objectPagination.totalRecord}
+    select(class="inner-pagination" pagination)
+      - for (var i = 1; i <= objectPagination.totalPage; i++)
+        option(value=i) Trang #{i}
   //- Section 7
