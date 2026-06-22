@@ -15,6 +15,10 @@ router.post("/create", upload.single("avatar"), tourValidate.createPost, tourCon
 
 router.patch("/change-multi", tourController.changeMulti);
 
+router.get("/edit/:id", tourController.edit);
+
+router.patch("/edit/:id",upload.single('avatar'), tourValidate.editPatch, tourController.editPatch);
+
 router.get("/trash", tourController.trash);
 
 module.exports = router;
