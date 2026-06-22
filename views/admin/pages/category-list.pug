@@ -1,4 +1,5 @@
 extends ../layouts/default.pug
+include ../mixins/pagination.pug
 
 
 block main 
@@ -94,11 +95,5 @@ block main
 
   //- Section 7 
   .section-7 
-    - const start = objectPagination.skip + 1;
-    - const end = Math.min(objectPagination.skip + objectPagination.limitItem, objectPagination.totalRecord);
-
-    span(class="inner-label") Hiển thị #{start} - #{end} của #{objectPagination.totalRecord}
-    select(class="inner-pagination" pagination)
-      - for (var i = 1; i <= objectPagination.totalPage; i++)
-        option(value=i) Trang #{i}
+    +pagination(objectPagination)
   //- Section 7

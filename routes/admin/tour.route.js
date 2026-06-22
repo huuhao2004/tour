@@ -13,6 +13,8 @@ router.get("/create", tourController.create);
 
 router.post("/create", upload.single("avatar"), tourValidate.createPost, tourController.createPost);
 
+router.patch("/change-multi", tourController.changeMulti);
+
 router.get("/trash", tourController.trash);
 
 module.exports = router;

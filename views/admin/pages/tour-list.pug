@@ -1,4 +1,6 @@
 extends ../layouts/default.pug
+include ../mixins/options.pug
+include ../mixins/pagination.pug
 
 
 block main 
@@ -10,50 +12,49 @@ block main
       .inner-item.inner-label 
         <i class="fa-solid fa-filter"></i>Bộ lọc
       .inner-item
-        select
+        select(filter-status)
           option(value="") Trạng thái
-          option(value="") Hoạt động
-          option(value="") Tạm dừng
+          option(value="active") Hoạt động
+          option(value="inactive") Tạm dừng
       .inner-item
-        select
+        select(filter-created-by)
           option(value="") Người tạo  
-          option(value="") Lê Văn A
-          option(value="") Lê Văn B
+          each item in accountAdminList
+            option(value=item._id) #{item.fullName }
       .inner-item.inner-date 
-        input(type="date")
+        input(type="date" filter-start-date)
         span -
-        input(type="date")
+        input(type="date" filter-end-date)
       .inner-item
-        select
+        select(filter-category)
           option(value="") Danh mục
-          option(value="") Danh mục 1
-          option(value="") Danh mục 2
+          +options(categoryList)
       .inner-item
-        select
+        select(filter-price)
           option(value="") Mức giá
-          option(value="") Dưới 2 tr
-          option(value="") Từ 2tr đến 4tr
-          option(value="") Từ 4tr đến 8tr
-          option(value="") Trên 8tr
-      .inner-item.inner-reset 
+          option(value="under-2m") Dưới 2 tr
+          option(value="2m-4m") Từ 2tr đến 4tr
+          option(value="4m-8m") Từ 4tr đến 8tr
+          option(value="over-8m") Trên 8tr
+      .inner-item.inner-reset(filter-reset)
         <i class="fa-solid fa-rotate-left"></i>Xóa bộ lọc
   //- End section 4
 
   //- Section 5
   .section-5 
     .inner-wrap 
-      .inner-change-status
+      .inner-change-status(change-multi data-api=`/${pathAdmin}/tour/change-multi`)
         .inner-item 
           select
             option(value="") -- Hành động --
-            option(value="") Hoạt đông
-            option(value="") Dừng hoạt động 
-            option(value="") Xóa
+            option(value="active") Hoạt đông
+            option(value="inactive") Dừng hoạt động 
+            option(value="delete") Xóa
         .inner-item 
           button Áp dụng
       .inner-search 
         <i class="fa-solid fa-magnifying-glass"></i>
-        input(type="text" placeholder="Tìm kiếm")
+        input(type="text" placeholder="Tìm kiếm" search)
       .inner-button-create 
         a(href=`/${pathAdmin}/tour/create`) + Tạo mới
       .inner-button-trash 
@@ -67,7 +68,7 @@ block main
         thead
           tr 
             th(class="inner-center")
-              input(type="checkbox" class="inner-check")
+              input(type="checkbox" class="inner-check" check-all)
             th Tên tour
             th Ảnh đại diện
             th Giá
@@ -77,41 +78,48 @@ block main
             th Tạo bởi  
             th Cập nhật bởi
             th Hành động
-        tbody 
-          tr 
-            td(class="inner-center")
-              input(type="checkbox" class="inner-check")
-            td Tour Hạ Long
-            td 
-              img(src="/admin/assets/images/tour1.jpg" class="inner-avatar")
-            td 
-              div NL: 1.900.000đ
-              div TE: 1.600.000đ  
-              div EB: 1.000.000đ
-            td 
-              div NL: 30
-              div TE: 20
-              div EB: 10
-            td(class="inner-center") 1
-            td(class="inner-center")
-              .badge.badge-green Hoạt động
-            td 
-              div Lê Văn A 
-              div.inner-time 16:30 - 20/10/2024
-            td 
-              div Lê Văn A 
-              div.inner-time 16:30 - 20/10/2024
-            td
-              .inner-buttons 
-                button(class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
-                button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
+        tbody
+          each item in tourList
+            tr 
+              td(class="inner-center")
+                input(type="checkbox" class="inner-check" check-item=item._id)
+              td #{item.name}
+              td 
+                img(src=item.avatar class="inner-avatar")
+              td 
+                div NL: #{item.priceNewAdult > 0 ? item.priceNewAdult.toLocaleString("vi-VN") : item.priceAdult.toLocaleString("vi-VN")}đ
+                div TE: #{item.priceNewChildren > 0 ? item.priceNewChildren.toLocaleString("vi-VN") : item.priceChildren.toLocaleString("vi-VN")}đ  
+                div EB: #{item.priceNewBaby > 0 ? item.priceNewBaby.toLocaleString("vi-VN") : item.priceBaby.toLocaleString("vi-VN")}đ
+              td 
+                div NL: #{item.stockAdult}
+                div TE: #{item.stockChildren}
+                div EB: #{item.stockBaby}
+              td(class="inner-center") #{item.position}
+              td(class="inner-center")
+                - if(item.status == "active")
+                  .badge.badge-green Hoạt động
+                - if(item.status == "inactive")
+                  .badge.badge-red Tạm dừng
+              td 
+                div #{item.createdByFullName}
+                div.inner-time #{item.createdAtFormat}
+              td 
+                div #{item.updatedByFullName}
+                div.inner-time #{item.updatedAtFormat}
+              td
+                .inner-buttons 
+                  a(
+                    class="inner-edit"
+                    href=`/${pathAdmin}/tour/edit/${item._id}`
+                  ) <i class="fa-regular fa-pen-to-square"></i>
+                  button(
+                    class="inner-delete"
+                    button-delete
+                    data-api  = `/${pathAdmin}/tour/delete/${item._id}`
+                  ) <i class="fa-regular fa-trash-can"></i>
   //- End section 6
 
   //- Section 7 
   .section-7 
-    span(class="inner-label") Hiện thị 1 - 9 của 78
-    select(class="inner-pagination")
-      option Trang 1
-      option Trang 2
-      option Trang 3
+    +pagination(objectPagination)
   //- Section 7

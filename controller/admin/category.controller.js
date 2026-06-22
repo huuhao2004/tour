@@ -19,17 +19,17 @@ module.exports.list = async (req, res) => {
   }
 
   // lọc theo ngày tạo
-  const dataFilter = {};
+  const dateFilter = {};
   if (req.query.startDate) {
     const startDate = moment(req.query.startDate).startOf("day").toDate();
-    dataFilter.$gte = startDate;
+    dateFilter.$gte = startDate;
   }
   if (req.query.endDate) {
     const endDate = moment(req.query.endDate).endOf("day").toDate();
-    dataFilter.$lte = endDate;
+    dateFilter.$lte = endDate;
   }
-  if (Object.keys(dataFilter).length > 0) {
-    find.createdAt = dataFilter
+  if (Object.keys(dateFilter).length > 0) {
+    find.createdAt = dateFilter;
   }
 
   // end lọc theo ngày tạo
@@ -37,7 +37,7 @@ module.exports.list = async (req, res) => {
   //search
   if (req.query.keyword) {
     const keyword = slugify(req.query.keyword, {
-      lower: true
+      lower: true,
     });
     const keywordRegex = new RegExp(keyword);
     find.slug = keywordRegex;
@@ -49,9 +49,12 @@ module.exports.list = async (req, res) => {
   const objectPagination = paginationHelper(req.query, countCategory);
   // end pagination
 
-  const categoryList = await Category.find(find).sort({
-    position: "desc",
-  }).skip(objectPagination.skip).limit(objectPagination.limitItem);
+  const categoryList = await Category.find(find)
+    .sort({
+      position: "desc",
+    })
+    .skip(objectPagination.skip)
+    .limit(objectPagination.limitItem);
 
   for (const item of categoryList) {
     if (item.createdBy) {
@@ -75,12 +78,12 @@ module.exports.list = async (req, res) => {
     pageTitle: "Quản lý danh mục",
     categoryList: categoryList,
     accountAdminList: accountAdminList,
-    objectPagination: objectPagination
+    objectPagination: objectPagination,
   });
 };
 
 module.exports.create = async (req, res) => {
-  const categoryList = await Category.find({  });
+  const categoryList = await Category.find({});
 
   const categoryTree = categoryHelper(categoryList, "");
 
@@ -184,13 +187,16 @@ module.exports.deletePatch = async (req, res) => {
   try {
     const id = req.params.id;
 
-    await Category.updateOne({
-      _id: id
-    }, {
-      deleted: true,
-      deletedBy: req.account._id,
-      deletedAt: Date.now()
-    })
+    await Category.updateOne(
+      {
+        _id: id,
+      },
+      {
+        deleted: true,
+        deletedBy: req.account._id,
+        deletedAt: Date.now(),
+      },
+    );
 
     req.flash("success", "Xóa danh mục thành công!");
 
@@ -213,7 +219,7 @@ module.exports.changeMulti = async (req, res) => {
           _id: { $in: ids },
         },
         {
-          status: option
+          status: option,
         },
       );
       req.flash("success", "Thay đổi trạng thái danh mục thành công!");
@@ -238,4 +244,3 @@ module.exports.changeMulti = async (req, res) => {
     console.log(error);
   }
 };
-

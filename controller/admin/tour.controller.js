@@ -2,10 +2,115 @@ const Category = require("../../models/category.model");
 const categoryHelper = require("../../helpers/category.helper");
 const City = require("../../models/city.model");
 const Tour = require("../../models/tour.model");
+const AccountAdmin = require("../../models/account-admin.model");
+const moment = require("moment");
+const priceRangeHelper = require("../../helpers/price.helper");
+const slugify = require("slugify");
+const paginationHelper = require("../../helpers/pagination.helper");
 
-module.exports.list = (req, res) => {
+module.exports.list = async (req, res) => {
+  const find = {
+    deleted: false,
+  };
+
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+
+  if (req.query.createdBy) {
+    find.createdBy = req.query.createdBy;
+  }
+
+  const dateFilter = {};
+  if (req.query.startDate) {
+    const startDate = moment(req.query.startDate).startOf("day").toDate();
+    dateFilter.$gte = startDate;
+  }
+  if (req.query.endDate) {
+    const endDate = moment(req.query.endDate).endOf("day").toDate();
+    dateFilter.$lte = endDate;
+  }
+  if (Object.keys(dateFilter).length > 0) {
+    find.createdAt = dateFilter;
+  }
+
+  // filter category
+  if (req.query.category) {
+    find.category = req.query.category;
+  }
+
+  // filter price
+  if (req.query.price) {
+    const { min, max } = priceRangeHelper[req.query.price];
+
+    const price = {
+      $cond: {
+        // Nếu newPrice bằng chuỗi rỗng "" (hoặc có thể thêm null nếu cần)
+        if: {
+          $or: [
+            { $eq: ["$priceNewAdult", ""] },
+            { $eq: ["$priceNewAdult", null] },
+            { $eq: ["$priceNewAdult", 0] },
+          ],
+        },
+        // Thì lấy oldPrice
+        then: "$priceAdult",
+        // Nếu không thì lấy newPrice
+        else: "$priceNewAdult",
+      },
+    }; //
+    // 3. Đưa logic tính toán vào $expr để so sánh với min và max
+    find.$expr = {
+      $and: [{ $gte: [price, min] }, { $lte: [price, max] }],
+    };
+  }
+
+  // search
+  if (req.query.keyword) {
+    const keyword = slugify(req.query.keyword, {
+      lower: true,
+    });
+    const keywordRegex = new RegExp(keyword);
+    find.slug = keywordRegex;
+  }
+
+  // pagintaion
+  const countTour = await Tour.countDocuments({ deleted: false });
+  const objectPagination = paginationHelper(req.query, countTour);
+  // end pagination
+
+  const categoryList = await Category.find({ deleted: false });
+  const tourList = await Tour.find(find)
+    .sort({ position: "desc" })
+    .skip(objectPagination.skip)
+    .limit(objectPagination.limitItem);
+  const accountAdminList = await AccountAdmin.find({}).select("_id fullName");
+  const categoryTree = categoryHelper(categoryList, "");
+
+  for (const item of tourList) {
+    if (item.createdBy) {
+      const infoAccountCreated = await AccountAdmin.findOne({
+        _id: item.createdBy,
+      });
+      item.createdByFullName = infoAccountCreated.fullName;
+    }
+    if (item.updatedBy) {
+      const infoAccountUpdated = await AccountAdmin.findOne({
+        _id: item.updatedBy,
+      });
+      item.updatedByFullName = infoAccountUpdated.fullName;
+    }
+
+    item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YYYY");
+    item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YYYY");
+  }
+
   res.render("admin/pages/tour-list.pug", {
     pageTitle: "Quản lý tour",
+    tourList: tourList,
+    accountAdminList: accountAdminList,
+    categoryList: categoryTree,
+    objectPagination: objectPagination,
   });
 };
 
@@ -74,6 +179,40 @@ module.exports.createPost = async (req, res) => {
     code: "success",
     messge: "Tạo tour thành công!",
   });
+};
+
+module.exports.changeMulti = async (req, res) => {
+  try {
+    const { option, ids } = req.body;
+    if (option == "active" || option == "inactive") {
+      await Tour.updateMany(
+        {
+          _id: { $in: ids },
+        },
+        {
+          status: option,
+        },
+      );
+      req.flash("message", "Cập nhật trạng thái tour thành công!");
+    } else if (option == "delete") {
+      await Tour.updateMany(
+        {
+          _id: { $in: ids },
+        },
+        {
+          deleted: true,
+          deletedAt: Date.now(),
+          deletedBy: req.account._id,
+        },
+      );
+      req.flash("message", "Xóa tour thành công!");
+    }
+    res.json({
+      code: "success",
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports.trash = (req, res) => {

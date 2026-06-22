@@ -1,0 +1,8 @@
+mixin pagination(objectPagination)
+  - const start = objectPagination.skip + 1;
+    - const end = Math.min(objectPagination.skip + objectPagination.limitItem, objectPagination.totalRecord);
+
+    span(class="inner-label") Hiển thị #{start} - #{end} của #{objectPagination.totalRecord}
+    select(class="inner-pagination" pagination)
+      - for (var i = 1; i <= objectPagination.totalPage; i++)
+        option(value=i) Trang #{i}

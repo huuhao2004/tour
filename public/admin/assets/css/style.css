@@ -290,7 +290,7 @@ a{
 .sider{
   background-color: #fff;
   border-right: 1px solid #E0E0E0;
-  width: 240px;
+  width: 210px;
   height: calc(100vh - 70px);
   position: fixed;
   top: 70px;
@@ -362,9 +362,9 @@ a{
 .main{
   position: absolute;
   top: 70px;
-  left: 240px;
+  left: 210px;
   background-color: #F5F6FA;
-  width: calc(100% - 240px);
+  width: calc(100% - 210px);
   min-height: calc(100vh - 70px);
   padding: 30px;
 }
@@ -609,7 +609,7 @@ a{
 }
 
 .section-4 .inner-item{
-  padding: 23.75px 24px;
+  padding: 23.75px 21px;
   display: inline-flex;
   align-items: center;
   gap: 12px;

@@ -885,6 +885,49 @@ if (filterEndDate) {
 }
 // End filter end date
 
+// Fitler category
+const filterCategory = document.querySelector("[filter-category]");
+if (filterCategory) {
+  const url = new URL(window.location.href);
+
+  filterCategory.addEventListener("change", () => {
+    const value = filterCategory.value;
+    if (value) {
+      url.searchParams.set("category", value);
+    }
+    else {
+      url.searchParams.delete("category");
+    }
+    window.location.href = url;
+  })
+  const valueCurrent = url.searchParams.get("category");
+  if (valueCurrent) {
+    filterCategory.value = valueCurrent;
+  }
+}
+// End filter category
+
+// Filter price
+const filterPrice = document.querySelector("[filter-price]");
+if (filterPrice) {
+  const url = new URL(window.location.href);
+  filterPrice.addEventListener("change", () => {
+    const value = filterPrice.value;
+    if (value) {
+      url.searchParams.set("price", value);
+    }
+    else {
+      url.searchParams.delete("price");
+    }
+    window.location.href = url;
+  })
+  const valueCurrent = url.searchParams.get("price");
+  if (valueCurrent) {
+    filterPrice.value = valueCurrent;
+  }
+}
+// End filter price
+
 // Filter reset
 const filerReset = document.querySelector("[filter-reset]");
 if (filerReset) {
