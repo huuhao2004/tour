@@ -319,7 +319,7 @@ module.exports.delete = async (req, res) => {
       {
         deleted: true,
         deletedAt: Date.now(),
-        deletedBy: req.account._id
+        deletedBy: req.account._id,
       },
     );
     req.flash("message", "Xóa tour thành công!");
@@ -331,8 +331,61 @@ module.exports.delete = async (req, res) => {
   }
 };
 
-module.exports.trash = (req, res) => {
+module.exports.trash = async (req, res) => {
+  const find = {
+    deleted: true,
+  };
+
+  const tourList = await Tour.find(find).sort({ position: "desc" });
+
+  for (const item of tourList) {
+    if (item.deletedBy) {
+      const infoAccountDeleted = await AccountAdmin.findOne({
+        _id: item.deletedBy,
+      });
+      item.deletedByFullName = infoAccountDeleted.fullName;
+    }
+
+    item.deletedAtFormat = moment(item.deletedAt).format("HH:mm - DD/MM/YYYY");
+  }
+
   res.render("admin/pages/tour-trash.pug", {
     pageTitle: "Thùng rác tour",
+    tourList: tourList,
   });
+};
+
+module.exports.undoPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await Tour.updateOne(
+      { _id: id },
+      {
+        deleted: false,
+      },
+    );
+    req.flash("success", "Hoàn tác tour thành công!");
+
+    res.json({
+      code: "success",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports.deleteDestroyPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await Tour.deleteOne({ _id: id });
+    req.flash("success", "Xóa vĩnh viễn tour thành công!");
+
+    res.json({
+      code: "success",
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };

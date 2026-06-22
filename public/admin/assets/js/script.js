@@ -796,6 +796,36 @@ if (listButtonDelete.length > 0) {
 }
 // End button delete
 
+// Button undo
+const listButtonUndo = document.querySelectorAll("[button-undo]");
+if (listButtonUndo.length > 0) {
+  listButtonUndo.forEach(button => {
+    button.addEventListener("click", () => {
+      const dataApi = button.getAttribute("data-api");
+      const isConfirm = confirm("Bạn có chắc chắn muốn hoàn tác không?");
+
+      if (!isConfirm) {
+        return;
+      }
+
+      const fetchApi = async () => {
+        const response = await fetch(dataApi, {
+          method: "PATCH"
+        });
+        const result = await response.json();
+        if (result.code == "success") {
+          window.location.reload();
+        }
+        else {
+          alert(result.message);
+        }
+      }
+      fetchApi();
+    })
+  })
+}
+// End 
+
 // Filter status
 const filterStatus = document.querySelector("[filter-status]");
 if (filterStatus) {
