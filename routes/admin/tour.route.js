@@ -17,7 +17,9 @@ router.patch("/change-multi", tourController.changeMulti);
 
 router.get("/edit/:id", tourController.edit);
 
-router.patch("/edit/:id",upload.single('avatar'), tourValidate.editPatch, tourController.editPatch);
+router.patch("/edit/:id", upload.single('avatar'), tourValidate.editPatch, tourController.editPatch);
+
+router.patch("/delete/:id", tourController.delete);
 
 router.get("/trash", tourController.trash);
 

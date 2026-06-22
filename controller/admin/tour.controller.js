@@ -311,6 +311,26 @@ module.exports.editPatch = async (req, res) => {
   }
 };
 
+module.exports.delete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Tour.updateOne(
+      { _id: id },
+      {
+        deleted: true,
+        deletedAt: Date.now(),
+        deletedBy: req.account._id
+      },
+    );
+    req.flash("message", "Xóa tour thành công!");
+    res.json({
+      code: "success",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports.trash = (req, res) => {
   res.render("admin/pages/tour-trash.pug", {
     pageTitle: "Thùng rác tour",
