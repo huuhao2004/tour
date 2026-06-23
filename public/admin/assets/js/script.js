@@ -444,17 +444,53 @@ if (settingWebsiteInfoForm) {
       const phone = event.target.phone.value;
       const email = event.target.email.value;
       const address = event.target.address.value;
+
       const logos = filePond.logo.getFiles();
       let logo = null;
       if (logos.length > 0) {
         logo = logos[0].file;
+        const elementImageDefault = event.target.logo.closest("[image-default]");
+        const imageDefault = elementImageDefault.getAttribute("image-default");
+        if (imageDefault.includes(logo.name)) {
+          logo = null;
+        }
       }
+
       const favicons = filePond.favicon.getFiles();
       let favicon = null;
       if (favicons.length > 0) {
         favicon = favicons[0].file;
+        const elementImageDefault = event.target.favicon.closest("[image-default]");
+        const imageDefault = elementImageDefault.getAttribute("image-default");
+        console.log(imageDefault, favicon);
+        console.log(imageDefault.includes(favicon.name));
+        if (imageDefault.includes(favicon.name)) {
+          favicon = null;
+        }
       }
-      console.log({ websiteName, phone, email, address, logo, favicon });
+
+      const formData = new FormData();
+      formData.append("websiteName", websiteName);
+      formData.append("phone", phone);
+      formData.append("email", email);
+      formData.append("address", address);
+      formData.append("logo", logo);
+      formData.append("favicon", favicon);
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/setting/website-info`, {
+          method: "PATCH",
+          body: formData
+        });
+        const result = await response.json();
+        if (result.code == "success") {
+          window.location.reload();
+        }
+        else if (result.code == "error") {
+          alert(result.message);
+        }
+      }
+      fetchApi();
     });
 }
 // End Setting website Info form
