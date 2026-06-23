@@ -186,7 +186,7 @@ if (categoryCreateForm) {
       formData.append("avatar", avatar);
       formData.append("description", description);
 
-      
+
       const fetchApi = async () => {
         const response = await fetch(`/${pathAdmin}/category/create`, {
           method: "POST",
@@ -277,10 +277,10 @@ if (tourCreateForm) {
 
   validation
     .addField("#name", [
-    {
-      rule: "required",
-      errorMessage: "Vui lòng nhập tên tour!",
-    },
+      {
+        rule: "required",
+        errorMessage: "Vui lòng nhập tên tour!",
+      },
     ])
     .onSuccess((event) => {
       const name = event.target.name.value;
@@ -604,7 +604,7 @@ if (settingAccountAmdminCreateForm) {
 
 // Setting Role Create Form
 const settingRoleCreateForm = document.querySelector("#setting-role-create-form");
-if(settingRoleCreateForm) {
+if (settingRoleCreateForm) {
   const validation = new JustValidate('#setting-role-create-form');
 
   validation
@@ -626,17 +626,35 @@ if(settingRoleCreateForm) {
       });
       // End permissions
 
-      console.log({
+      const dataFinal = {
         name,
         description,
         permissions
-      });
+      };
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/setting/role/create`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        });
+        const result = await response.json();
+        if (result.code == "success") {
+          window.location.href = `/${pathAdmin}/setting/role/list`
+        } else if (result.code == "error") {
+          alert(result.message)
+        }
+      }
+      fetchApi();
+
     });
 }
 
 // Profile Edit Form
 const profileEditForm = document.querySelector("#profile-edit-form");
-if(profileEditForm) {
+if (profileEditForm) {
   const validation = new JustValidate('#profile-edit-form');
 
   validation
@@ -682,9 +700,9 @@ if(profileEditForm) {
       const email = event.target.email.value;
       const phone = event.target.phone.value;
       const avatars = filePond.avatar.getFiles();
-      
+
       let avatar = null;
-      if(avatars.length > 0) {
+      if (avatars.length > 0) {
         avatar = avatars[0].file;
       }
 
@@ -796,7 +814,7 @@ if (alertTime) {
   let time = alertTime.getAttribute("alert-time");
   time = time ? parseInt(time) : 4000;
   setTimeout(() => {
-    alertTime.remove(); 
+    alertTime.remove();
   }, time)
 }
 // End alert
@@ -998,7 +1016,7 @@ if (filterPrice) {
 const filerReset = document.querySelector("[filter-reset]");
 if (filerReset) {
   const url = new URL(window.location.href);
-  
+
   filerReset.addEventListener("click", () => {
     url.search = "";
     window.location.href = url;
@@ -1031,7 +1049,7 @@ if (changeMulti) {
   const select = changeMulti.querySelector("select");
   const button = changeMulti.querySelector("button");
 
-  button.addEventListener("click", () => { 
+  button.addEventListener("click", () => {
     const option = select.value;
     const listInputChecked = document.querySelectorAll("[check-item]:checked");
     if (option && listInputChecked.length > 0) {
@@ -1045,12 +1063,12 @@ if (changeMulti) {
       };
 
       const dataApi = changeMulti.getAttribute("data-api");
-      
+
       const fetchApi = async () => {
         const response = await fetch(dataApi, {
           method: "PATCH",
           headers: {
-            "Content-Type" : "application/json"
+            "Content-Type": "application/json"
           },
           body: JSON.stringify(dataFinal)
         })
@@ -1093,7 +1111,7 @@ if (search) {
 // End search
 
 // panination
-const pagination = document.querySelector("[pagination]"); 
+const pagination = document.querySelector("[pagination]");
 if (pagination) {
   const url = new URL(window.location.href);
   pagination.addEventListener("change", () => {
