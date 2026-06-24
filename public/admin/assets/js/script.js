@@ -895,14 +895,39 @@ if (profileEditForm) {
       let avatar = null;
       if (avatars.length > 0) {
         avatar = avatars[0].file;
+
+        // file ảnh đã up thì k up lên cloud nữa
+        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        if (elementImageDefault) {
+          const imageDefault = elementImageDefault.getAttribute("image-default");
+          if (imageDefault.includes(avatar.name)) {
+            avatar = null;
+          }
+        }
       }
 
-      console.log({
-        fullName,
-        email,
-        phone,
-        avatar
-      });
+      // Tạo FormData
+      const formData = new FormData();
+
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("avatar", avatar);
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/profile/edit`, {
+          method: "PATCH",
+          body: formData
+        });
+        const result = await response.json();
+
+        if (result.code == "success") {
+          window.location.reload();
+        } else {
+          alert(data.message);
+        }
+      };
+      fetchApi();
     });
 }
 
