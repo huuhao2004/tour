@@ -497,9 +497,8 @@ if (settingWebsiteInfoForm) {
 
 
 // Setting account admin create form
-const settingAccountAmdminCreateForm = document.querySelector("#setting-account-admin-create-form");
-
-if (settingAccountAmdminCreateForm) {
+const settingAccountAdminCreateForm = document.querySelector("#setting-account-admin-create-form");
+if (settingAccountAdminCreateForm) {
   const validation = new JustValidate("#setting-account-admin-create-form");
 
   validation
@@ -587,19 +586,157 @@ if (settingAccountAmdminCreateForm) {
         avatar = avatars[0].file;
       }
 
-      console.log({
-        fullName,
-        email,
-        phone,
-        role,
-        positionCompany,
-        status,
-        password,
-        avatar,
-      });
+      const formData = new FormData();
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("role", role);
+      formData.append("positionCompany", positionCompany);
+      formData.append("status", status);
+      formData.append("password", password);
+      formData.append("avatar", avatar);
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/setting/account-admin/create`, {
+          method: "POST",
+          body: formData
+        });
+        const result = await response.json();
+        if (result.code == "success") {
+          window.location.href = `/${pathAdmin}/setting/account-admin/list`;
+        }
+        else {
+          alert(result.message);
+        }
+      }
+      fetchApi();
     });
 }
 // End Setting account admin create form
+
+// Setting account admin edit form
+const settingAccountAdminEditForm = document.querySelector("#setting-account-admin-edit-form");
+if (settingAccountAdminEditForm) {
+  const validation = new JustValidate("#setting-account-admin-edit-form");
+
+  validation
+    .addField("#fullName", [
+      {
+        rule: "required",
+        errorMessage: "Vui lòng nhập họ tên!",
+      },
+      {
+        rule: "minLength",
+        value: 5,
+        errorMessage: "Họ tên phải ít nhất 5 kí tự!",
+      },
+      {
+        rule: "maxLength",
+        value: 50,
+        errorMessage: "Họ tên tối đa 50 kí tự!",
+      },
+    ])
+    .addField("#email", [
+      {
+        rule: "required",
+        errorMessage: "Vui lòng nhập email!",
+      },
+      {
+        rule: "email",
+        errorMessage: "Email không đúng định dạng!",
+      },
+    ])
+    .addField("#phone", [
+      {
+        rule: "required",
+        errorMessage: "Vui lòng nhập số điện thoại!",
+      },
+      {
+        rule: "customRegexp",
+        value: /^(84|0)[35789][0-9]{8}$/,
+        errorMessage: "Số điện thoại không đúng định dạng!",
+      },
+    ])
+    .addField("#positionCompany", [
+      {
+        rule: "required",
+        errorMessage: "Vui lòng nhập chức vụ!",
+      },
+    ])
+    .addField("#password", [
+      {
+        validator: (value) => value === "" || value.length >= 8,
+        errorMessage: "Mật khẩu phải chứa ít nhất 8 kí tự",
+      },
+      {
+        validator: (value) => value === "" || /[A-Z]/.test(value),
+        errorMessage: "Mật khẩu phải chứa ít 1 chữ cái in hoa",
+      },
+      {
+        validator: (value) => value === "" || /[a-z]/.test(value),
+        errorMessage: "Mật khẩu phải chứa ít 1 chữ cái in thường",
+      },
+      {
+        validator: (value) => value === "" || /\d/.test(value),
+        errorMessage: "Mật khẩu phải chứa ít 1 chữ số",
+      },
+      {
+        validator: (value) => value === "" || /[@$?!%*]/.test(value),
+        errorMessage: "Mật khẩu phải chứa ít 1 kí tự đặc biệt",
+      },
+    ])
+    .onSuccess((event) => {
+      const fullName = event.target.fullName.value;
+      const email = event.target.email.value;
+      const phone = event.target.phone.value;
+      const role = event.target.role.value;
+      const positionCompany = event.target.positionCompany.value;
+      const status = event.target.status.value;
+      const password = event.target.password.value;
+      const avatars = filePond.avatar.getFiles();
+      let avatar = null;
+      if (avatars.length > 0) {
+        avatar = avatars[0].file;
+
+        // file ảnh đã up thì k up lên cloud nữa
+        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        if (elementImageDefault) {
+          const imageDefault = elementImageDefault.getAttribute("image-default");
+          if (imageDefault.includes(avatar.name)) {
+            avatar = null;
+          }
+        }
+      }
+
+      const formData = new FormData();
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("role", role);
+      formData.append("positionCompany", positionCompany);
+      formData.append("status", status);
+      formData.append("password", password);
+      formData.append("avatar", avatar);
+
+      const id = window.location.href.split("/").pop();
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/setting/account-admin/edit/${id}`, {
+          method: "PATCH",
+          body: formData
+        });
+        const result = await response.json();
+        if (result.code == "success") {
+          window.location.reload();
+        }
+        else {
+          alert(result.message);
+        }
+      }
+      fetchApi();
+    });
+}
+// End Setting account admin edit form
 
 
 // Setting Role Create Form

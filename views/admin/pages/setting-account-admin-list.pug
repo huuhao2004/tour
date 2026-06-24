@@ -62,23 +62,29 @@ block main
             th Chức vụ
             th(class="inner-center") Trạng thái
             th Hành động
-        tbody 
-          tr 
-            td(class="inner-center")
-              input(type="checkbox" class="inner-check")
-            td Lê Văn A
-            td(class="inner-center")
-              img(src="/admin/assets/images/avatar.jpg" class="inner-avatar")
-            td levana@gmail.com
-            td 0123456789
-            td Quản trị viên 
-            td Giám đốc
-            td(class="inner-center")
-              .badge.badge-green Hoạt động
-            td
-              .inner-buttons 
-                button(class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
-                button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
+        tbody
+          each item in accountAdminList
+            tr 
+              td(class="inner-center")
+                input(type="checkbox" class="inner-check")
+              td #{item.fullName}
+              td(class="inner-center")
+                img(src=item.avatar class="inner-avatar")
+              td #{item.email}
+              td #{item.phone}
+              td #{item.roleName}
+              td #{item.positionCompany}
+              td(class="inner-center")
+                if(item.status == "active")
+                  .badge.badge-green #{item.status}
+                else if(item.status == "inactive")
+                  .badge.badge-red #{item.status}
+                else 
+                  .badge.badge-orange #{item.status}
+              td
+                .inner-buttons 
+                  a(class="inner-edit" href=`/${pathAdmin}/setting/account-admin/edit/${item._id}`) <i class="fa-regular fa-pen-to-square"></i>
+                  button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
   //- End section 6
 
    //- Section 7 

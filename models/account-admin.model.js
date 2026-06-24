@@ -4,11 +4,25 @@ const accountAdminSchema = new mongoose.Schema(
   {
     fullName: String,
     email: String,
-    password: String,
+    phone: String,
+    role: String,
+    positionCompany: String,
     status: {
       type: String,
-      default : "initial"
-    }
+      default: "initial"
+    },
+    password: String,
+    avatar: String,
+    createdBy: String,
+    updatedBy: String,
+    deleted: {
+      type: Boolean,
+      default: false
+    },
+    deletedBy: String,
+    deletedAt: Date
+  }, {
+    timestamps: true
   }
 )
 
