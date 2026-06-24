@@ -979,7 +979,28 @@ if (profileChangePasswordForm) {
     ])
     .onSuccess((event) => {
       const password = event.target.password.value;
-      console.log(password);
+      
+      const dataFinal = {
+        password
+      };
+
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/profile/change-password`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        });
+        const result = await response.json();
+
+        if (result.code == "success") {
+          window.location.reload();
+        } else {
+          alert(data.message);
+        }
+      };
+      fetchApi();
     });
 }
 // End Profile change password form
