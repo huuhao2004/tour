@@ -31,14 +31,15 @@ block main
             th Tên nhóm quyền
             th Mô tả ngắn
             th Hành động
-        tbody 
-          tr 
-            td(class="inner-center")
-              input(type="checkbox" class="inner-check")
-            td Quản trị viên
-            td Có đầy đủ các quyền
-            td
-              .inner-buttons 
-                button(class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
-                button(class="inner-delete") <i class="fa-regular fa-trash-can"></i>
+        tbody
+          each item in roleList
+            tr 
+              td(class="inner-center")
+                input(type="checkbox" class="inner-check")
+              td #{item.name}
+              td #{item.description}
+              td
+                .inner-buttons 
+                  a(class="inner-edit" href=`/${pathAdmin}/setting/role/edit/${item._id}`) <i class="fa-regular fa-pen-to-square"></i>
+                  a(class="inner-delete" href=`/${pathAdmin}/setting/role/delete/${item._id}`) <i class="fa-regular fa-trash-can"></i>
   //- End section 6

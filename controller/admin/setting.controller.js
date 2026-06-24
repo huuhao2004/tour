@@ -64,9 +64,13 @@ module.exports.accountAdminCreate = (req, res) => {
   });
 };
 
-module.exports.roleList = (req, res) => {
+module.exports.roleList = async (req, res) => {
+  const roleList = await Role.find({
+    deleted: false
+  });
   res.render("admin/pages/setting-role-list.pug", {
     pageTitle: "Nhóm quyền",
+    roleList: roleList
   });
 };
 
@@ -91,3 +95,32 @@ module.exports.roleCreatePost = async (req, res) => {
   })
 };
 
+module.exports.roleEdit = async (req, res) => {
+  const id = req.params.id;
+
+  const roleDetail = await Role.findOne({ _id: id });
+  
+  res.render("admin/pages/setting-role-edit.pug", {
+    pageTitle: "Chỉnh sử nhóm quyền",
+    permissionList: permissionListConfig.permissionList,
+    roleDetail: roleDetail
+  });
+};
+
+module.exports.roleEditPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    console.log(id);
+
+    await Role.updateOne({ _id: id }, req.body);
+
+    req.flash("success","Cập nhật nhóm quyền thành công!")
+
+    res.json({
+      code: "success"
+    })
+  } catch (error) {
+    console.log(error);
+  }
+};
