@@ -1,43 +1,48 @@
 mixin product-item(item)
+
+  - const priceAdult = Number(item.priceAdult || 0)
+  - const priceNewAdult = Number(item.priceNewAdult || priceAdult || 0)
+  - const discount = priceAdult > 0 && priceNewAdult > 0 && priceNewAdult < priceAdult ? Math.round(((priceAdult - priceNewAdult) / priceAdult) * 100) : 0
+
   .product-item
     .inner-image
-      a(href=item.slug)
+      a(href=`/tour/detail/${item.slug}`)
         img(
           alt=item.name
           src=item.avatar
           )
     .inner-discount
       i.fa-solid.fa-bolt
-      | Giảm -#{item.discount}%
+      | Giảm -#{discount}%
     .inner-content
       h3.inner-title
         a(href=item.slug) #{item.name}
       .inner-prices
-        if(item.discount > 0)
+        if(discount > 0)
           .inner-price-old
-            | #{item.priceOld.toLocaleString("vi-VN")}
+            | #{priceAdult.toLocaleString("vi-VN")}
             span.inner-unit đ
         .inner-price-new
-          | #{item.priceNew.toLocaleString("vi-VN")}
+          | #{priceNewAdult.toLocaleString("vi-VN")}
           span.inner-unit đ
       .inner-desc
         .inner-desc-item
           | Mã Tour:
-          b #{item.code}
+          b MT-00001
         .inner-desc-item
           | Ngày Khởi Hành:
-          b #{item.departureDate}
+          b #{item.departureDateFormat}
         .inner-desc-item
           | Thời Gian:
           b #{item.time}
       .inner-meta
         .inner-rating
           .inner-star
-            - for(i = 0 ; i < item.ratingStar; i++ )  
+            - for(i = 0 ; i < 4; i++ )  
               i.fa-solid.fa-star
-            - for(i=item.ratingStar; i< 5;i++)
+            - for(i=4; i< 5;i++)
               i.fa-regular.fa-star
-          .inner-number (#{item.ratingTotal})
+          .inner-number (8)
         .inner-stock
           .inner-label Số chỗ còn:
-          .inner-number #{item.stock}
+          .inner-number #{item.stockAdult}

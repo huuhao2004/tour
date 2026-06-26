@@ -108,65 +108,6 @@ block main
             | Tìm kiếm
   // End section 1
   // Section 2
-  -
-    var productListSection2 = [
-      {
-        "avatar": "/assets/images/product1.jpg", 
-        "slug" : "",
-        "discount": 30,
-        "name" : "Hà Nội – Lào Cai – SaPa 4N3Đ",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 4,
-        "ratingTotal": 20,
-        "stock": 10
-      },
-      {
-        "avatar": "/assets/images/product2.jpg", 
-        "slug" : "",
-        "discount": 0,
-        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 3,
-        "ratingTotal": 20,
-        "stock": 10
-      },
-      {
-        "avatar": "/assets/images/product3.jpg", 
-        "slug" : "",
-        "discount": 30,
-        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 4,
-        "ratingTotal": 20,
-        "stock": 10
-      },
-      {
-        "avatar": "/assets/images/product1.jpg", 
-        "slug" : "",
-        "discount": 30,
-        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 4,
-        "ratingTotal": 20,
-        "stock": 10
-      }
-    ]
   .section-2(
     data-aos-delay="300" 
     data-aos-duration="2000" 
@@ -201,7 +142,7 @@ block main
         .inner-list
           .swiper.swiper-section-2
             .swiper-wrapper
-              each item in productListSection2
+              each item in tourListSection2
                 .swiper-slide
                   +product-item(item)
               
