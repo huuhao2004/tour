@@ -98,29 +98,36 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
-  if (req.body.position) {
-    req.body.position = parseInt(req.body.position);
+  if (req.role.permissions.includes("category-create")) {
+    if (req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      const countCategory = await Category.countDocuments();
+      req.body.position = countCategory + 1;
+    }
+
+    req.body.createdBy = req.account._id;
+    req.body.updatedBy = req.account._id;
+
+    req.body.avatar = req.file ? req.file.path : "";
+
+    console.log(req.file);
+
+    const newRecord = new Category(req.body);
+    await newRecord.save();
+
+    req.flash("success", "Tạo danh mục thành công!");
+
+    res.json({
+      code: "success",
+      message: "Tạo danh mục thành công!",
+    });
   } else {
-    const countCategory = await Category.countDocuments();
-    req.body.position = countCategory + 1;
+    res.json({
+      code: "error",
+      message: "Không có quyền!"
+    })
   }
-
-  req.body.createdBy = req.account._id;
-  req.body.updatedBy = req.account._id;
-
-  req.body.avatar = req.file ? req.file.path : "";
-
-  console.log(req.file);
-
-  const newRecord = new Category(req.body);
-  await newRecord.save();
-
-  req.flash("success", "Tạo danh mục thành công!");
-
-  res.json({
-    code: "success",
-    message: "Tạo danh mục thành công!",
-  });
 };
 
 module.exports.edit = async (req, res) => {
@@ -149,61 +156,75 @@ module.exports.edit = async (req, res) => {
 
 module.exports.editPatch = async (req, res) => {
   try {
-    const id = req.params.id;
+    if (req.role.permissions.includes("category-edit")) {
+      const id = req.params.id;
 
-    if (req.body.position) {
-      req.body.position = parseInt(req.body.position);
+      if (req.body.position) {
+        req.body.position = parseInt(req.body.position);
+      } else {
+        const countCategory = await Category.countDocuments();
+        req.body.position = countCategory + 1;
+      }
+
+      req.body.updatedBy = req.account._id;
+
+      if (req.file) {
+        req.body.avatar = req.file.path;
+      } else {
+        delete req.body.avatar; // xóa req.body.avatar khỏi req.body đẻ khỏi cập nhật thành ""
+      }
+
+      await Category.updateOne(
+        {
+          _id: id,
+          deleted: false,
+        },
+        req.body,
+      );
+
+      req.flash("success", "Cập nhật danh mục thành công!");
+
+      res.json({
+        code: "success",
+        message: "Cập nhật danh mục thành công!",
+      });
     } else {
-      const countCategory = await Category.countDocuments();
-      req.body.position = countCategory + 1;
+      res.json({
+        code: "error"
+      })
     }
-
-    req.body.updatedBy = req.account._id;
-
-    if (req.file) {
-      req.body.avatar = req.file.path;
-    } else {
-      delete req.body.avatar; // xóa req.body.avatar khỏi req.body đẻ khỏi cập nhật thành ""
-    }
-
-    await Category.updateOne(
-      {
-        _id: id,
-        deleted: false,
-      },
-      req.body,
-    );
-
-    req.flash("success", "Cập nhật danh mục thành công!");
-
-    res.json({
-      code: "success",
-      message: "Cập nhật danh mục thành công!",
-    });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports.deletePatch = async (req, res) => {
   try {
-    const id = req.params.id;
+    if (req.role.permissions.includes("category-delete")) {
+      const id = req.params.id;
 
-    await Category.updateOne(
-      {
-        _id: id,
-      },
-      {
-        deleted: true,
-        deletedBy: req.account._id,
-        deletedAt: Date.now(),
-      },
-    );
+      await Category.updateOne(
+        {
+          _id: id,
+        },
+        {
+          deleted: true,
+          deletedBy: req.account._id,
+          deletedAt: Date.now(),
+        },
+      );
 
-    req.flash("success", "Xóa danh mục thành công!");
+      req.flash("success", "Xóa danh mục thành công!");
 
-    res.json({
-      code: "success",
-      message: "Xóa danh mục thành công!",
-    });
+      res.json({
+        code: "success",
+        message: "Xóa danh mục thành công!",
+      });
+    } else {
+      res.json({
+        code: "error"
+      })
+    }
   } catch (error) {
     console.log(error);
   }

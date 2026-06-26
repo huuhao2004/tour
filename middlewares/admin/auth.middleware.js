@@ -26,12 +26,13 @@ module.exports.verifyToken = async (req, res, next) => {
       return;
     }
 
-    req.account = exitsAccount;
-
     //lay ra ten nhom quyen cua account
     const role = await Role.findOne({
       _id: exitsAccount.role
     })
+
+    req.account = exitsAccount;
+    req.role = role;
 
     //Gửi account trong token sang fe = req.locals
     res.locals.account = {
