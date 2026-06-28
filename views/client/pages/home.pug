@@ -218,56 +218,11 @@ block main
 
   
   // Section 6
-  -
-    var productListSection6 = [
-      {
-        "avatar": "/assets/images/product2.jpg", 
-        "slug" : "",
-        "discount": 0,
-        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 3,
-        "ratingTotal": 20,
-        "stock": 10
-      },
-      {
-        "avatar": "/assets/images/product3.jpg", 
-        "slug" : "",
-        "discount": 30,
-        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 4,
-        "ratingTotal": 20,
-        "stock": 10
-      },
-      {
-        "avatar": "/assets/images/product1.jpg", 
-        "slug" : "",
-        "discount": 30,
-        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 4,
-        "ratingTotal": 20,
-        "stock": 10
-      }
-    ]
   .section-6
     .container
       .box-title Tour Nước Ngoài
       .inner-wrap
-        each item in productListSection6
+        each item in tourListSection6
           +product-item(item)
       .inner-button
         a.button-outline(href="#") Xem tất cả

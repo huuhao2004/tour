@@ -42,9 +42,36 @@ module.exports.home = async (req, res) => {
   }
   // End section 4: Tour trong nước
 
+  // Section 6: Tour nước ngoài
+  const categorySection6 = await Category.findOne({ slug: "tour-nuoc-ngoai" });
+  const categoryIdSection6 = categorySection6._id.toString();
+  const listCategory6 = [categoryIdSection6];
+
+  const listSubCategory6 = await Category.find({
+    parent: categoryIdSection6,
+    deleted: false,
+    status: "active"
+  });
+
+  for (const item of listSubCategory6) {
+    listCategory6.push(item._id);
+  }
+
+  const tourListSection6 = await Tour.find({
+    category: { $in: listCategory6 },
+    deleted: false,
+    status: "active"
+  }).sort({ position: "desc" }).limit(8);
+
+  for (item of tourListSection6) {
+    item.departureDateFormat = moment(new Date(item.departureDate)).format("DD/MM/YYYY");
+  }
+  // End section 6: Tour nước ngoài
+
   res.render("client/pages/home.pug", {
     pageTitle: "Trang chủ",
     tourListSection2: tourListSection2,
-    tourListSection4: tourListSection4
+    tourListSection4: tourListSection4,
+    tourListSection6: tourListSection6
   });
 }
