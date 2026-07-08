@@ -211,7 +211,27 @@ if (emailForm) {
     ])
     .onSuccess((event) => {
       const email = event.target.email.value;
-      console.log(email);
+      
+      const dataFinal = {
+        email
+      };
+
+      const fetchApi = async () => {
+        const response = await fetch("/contact/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        });
+        const result = await response.json();
+        if (result.code == "error") {
+          alert(result.message);
+        } else if(result.code == "success") {
+          window.location.reload();
+        }
+      }
+      fetchApi();
     });
 }
 // End email form
@@ -286,3 +306,93 @@ if (orderForm) {
   });
 }
 // End Order form
+
+// Alert
+const alertTime = document.querySelector("[alert-time]");
+if (alertTime) {
+  let time = alertTime.getAttribute("alert-time");
+  time = time ? parseInt(time) : 4000;
+  setTimeout(() => {
+    alertTime.remove();
+  }, time)
+}
+// End alert
+
+// box filter
+const boxFilter = document.querySelector(".box-filter");
+if (boxFilter) {
+  const url = new URL(`${window.location.origin}/search`);
+
+  const buttonApply = boxFilter.querySelector(".inner-button");
+  buttonApply.addEventListener("click", () => {
+    const filterList = [
+      "locationFrom",
+      "locationTo",
+      "departureDate",
+      "stockAdult",
+      "stockChildren",
+      "stockBaby",
+      "price"
+    ]
+
+    filterList.forEach(item => {
+      const value = boxFilter.querySelector(`[name="${item}"]`).value;
+      if (value) {
+        url.searchParams.set(item, value);
+      } else {
+        url.searchParams.delete(item);
+      }
+    });
+
+    window.location.href = url.href;
+  })
+}
+// End box filter
+
+// Form search home
+const formSearch = document.querySelector("[form-search]");
+if (formSearch) {
+  const url = new URL(`${window.location.origin}/search`);
+  formSearch.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    //Điểm đến
+    const locationTo = formSearch.locationTo.value;
+    if (locationTo) {
+      url.searchParams.set("locationTo", locationTo);
+    }else {
+      url.searchParams.delete("locationTo");
+    }
+    // Số lượng
+    const stockAdult = parseInt(formSearch.querySelector("[stock-adult]").innerHTML);
+    if (stockAdult > 0) {
+      url.searchParams.set("stockAdult", stockAdult);
+    } else {
+      url.searchParams.delete("stockAdult");
+    }
+
+    const stockChildren = parseInt(formSearch.querySelector("[stock-children]").innerHTML);
+    if (stockChildren > 0) {
+      url.searchParams.set("stockChildren", stockChildren);
+    } else {
+      url.searchParams.delete("stockChildren");
+    }
+
+    const stockBaby = parseInt(formSearch.querySelector("[stock-baby]").innerHTML);
+    if (stockBaby > 0) {
+      url.searchParams.set("stockBaby", stockBaby);
+    } else {
+      url.searchParams.delete("stockBaby");
+    }
+    // Ngày khởi hành
+    const depatureDate = formSearch.depatureDate.value;
+    if (depatureDate) {
+      url.searchParams.set("depatureDate", depatureDate);
+    } else {
+      url.searchParams.delete("depatureDate");
+    }
+
+    window.location.href = url.href;
+  })
+}
+// End form search home

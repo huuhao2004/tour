@@ -28,7 +28,11 @@ html(lang="en")
       href="/assets/css/style.css" 
       rel="stylesheet"
       )
-  body 
+  body
+    - if(messages.success)
+      div(class="alert alert-success" alert-time="3000")
+        span #{messages.success}
+    
     include ../partials/header.pug
 
     block main 

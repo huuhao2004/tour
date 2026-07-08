@@ -5,59 +5,12 @@ include ../mixins/product-item.pug
 block main
 
   // Box Breadcrumb
-  -
-    var breadcrumb = {
-      image: "/assets/images/banner6.jpg",
-      title: "Tour nước ngoài",
-      list: [
-        {
-          link: "/",
-          title: "Trang chủ"
-        },
-        {
-          link: "/tours",
-          title: "Tour nước ngoài"
-        }
-      ]
-    }
-  
   +box-breadcrumb(breadcrumb)
   // Box Breadcrumb
 
 
 
   // Section 9
-  -
-    var productListSection9 = [
-      {
-        "avatar": "/assets/images/product1.jpg", 
-        "slug" : "",
-        "discount": 30,
-        "name" : "Hà Nội – Lào Cai – SaPa 4N3Đ",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 4,
-        "ratingTotal": 20,
-        "stock": 10
-      },
-      {
-        "avatar": "/assets/images/product2.jpg", 
-        "slug" : "",
-        "discount": 0,
-        "name" : "Tour 2024 Phú Quốc – Thiên Đường Đảo Ngọc (3N2D)",
-        "priceOld" : 13650000,
-        "priceNew": 2590000,
-        "code" : "TOUR000001",
-        "departureDate": "22/07/2024",
-        "time": "10 Ngày 9 Đêm",
-        "ratingStar": 3,
-        "ratingTotal": 20,
-        "stock": 10
-      }
-    ]
   .section-9
     .container
       .inner-wrap
@@ -70,22 +23,20 @@ block main
             .inner-body
               .inner-group
                 label.inner-label(for="") Điểm đi
-                select(name="")
+                select(name="locationFrom")
                   option(value="") -- Chọn điểm đi --
-                  option(value="") Hà Nội
-                  option(value="") Đà Nẵng
-                  option(value="") Nha Trang
+                  each item in cityList
+                    option(value=item._id) #{item.name} 
               .inner-group
                 label.inner-label(for="") Điểm đến
-                select(name="")
+                select(name="locationTo")
                   option(value="") -- Chọn điểm đến --
-                  option(value="") Hà Nội
-                  option(value="") Đà Nẵng
-                  option(value="") Nha Trang
+                  each item in cityList
+                    option(value=item.name) #{item.name} 
               .inner-group
                 label.inner-label(for="") Ngày khởi hành
                 input(
-                  name="" 
+                  name="departureDate" 
                   type="date"
                   )
               .inner-group
@@ -95,42 +46,39 @@ block main
                     span Người lớn:
                     input(
                       value="0" 
-                      name="" 
+                      name="stockAdult" 
                       type="number"
                       )
                   .inner-input-item
                     span Trẻ em:
                     input(
                       value="0" 
-                      name="" 
+                      name="stockChildren" 
                       type="number"
                       )
                   .inner-input-item
                     span Em bé:
                     input(
                       value="0" 
-                      name="" 
+                      name="stockBaby" 
                       type="number"
                       )
               .inner-group
                 label.inner-label(for="") Mức giá
-                select(name="")
+                select(name="price")
                   option(value="") -- Chọn khoảng giá --
-                  option(value="") Dưới 1tr
-                  option(value="") Từ 1tr đến 3tr
-                  option(value="") Từ 3tr đến 6tr
-                  option(value="") Từ 6tr đến 10tr
-                  option(value="") Trên 10tr
+                  option(value="0-999999") Dưới 1tr
+                  option(value="1000000-3000000") Từ 1tr đến 3tr
+                  option(value="3000000-6000000") Từ 3tr đến 6tr
+                  option(value="6000000-10000000") Từ 6tr đến 10tr
+                  option(value="10000000-1000000000") Trên 10tr
               .inner-group
                 button.inner-button Áp dụng
           // End box fiter
         .inner-right
           .inner-info
-            h2.inner-title Tour Nước Ngoài
-            .inner-desc
-              | Du lịch Châu Á: là châu lục lớn và đông dân nhất thế giới. Châu Á cũng có nhiều danh lam thắng cảnh đẹp tại một số quốc
-              |   gia như Hàn Quốc, Nhật Bản, Trung Quốc, Việt Nam,... và VK Travel là nhà tổ chức du lịch chuyên nghiệp hàng đầu Châu Á,
-              |   đã 5 lần liên tiếp nhận giải TTG Travel Awards. Hãy cùng 28.Travel du lịch Châu Á để tận hưởng những dịch vụ tốt nhất.
+            h2.inner-title #{category.name}
+            .inner-desc !{category.description}
           .inner-info-2
             .inner-sort
               .inner-label Sắp xếp:
@@ -149,9 +97,9 @@ block main
                   i.fa-solid.fa-eye
             .inner-count-record
               | Tất cả:
-              b 101
+              b #{tourListSection9.length} Tour
           .inner-list-tour
-            each item in productListSection9 
+            each item in tourListSection9 
               +product-item(item)
           // Pagination
           .box-pagination

@@ -17,7 +17,9 @@ block main
         p.inner-desc
           | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
           |   incididunt ut labore et dolore magna aliqua
-        form.inner-form
+        form.inner-form(
+          form-search
+        )
           .inner-box.inner-address
             .inner-input-group
               img.inner-icon(
@@ -27,7 +29,8 @@ block main
               input.inner-input(
                 placeholder="Bạn muốn đi đâu" 
                 type="text"
-                )
+                name="locationTo"
+              )
               i.fa-solid.fa-angle-down.inner-down
             .inner-success
               .inner-success-title
@@ -78,19 +81,19 @@ block main
                 .inner-label Người lớn
                 .inner-count
                   span.inner-down -
-                  .inner-number 1
+                  .inner-number(stock-adult) 1
                   span.inner-up +
               .inner-item
                 .inner-label Trẻ em
                 .inner-count
                   span.inner-down -
-                  .inner-number 1
+                  .inner-number(stock-children) 1
                   span.inner-up +
               .inner-item
                 .inner-label Em bé
                 .inner-count
                   span.inner-down -
-                  .inner-number 1
+                  .inner-number(stock-baby) 1
                   span.inner-up +
           .inner-box.inner-calendar
             .inner-input-group
@@ -100,9 +103,9 @@ block main
                 )
               input.inner-input(
                 placeholder="Lịch khởi hành" 
-                type="text"
-                )
-              i.fa-solid.fa-angle-down.inner-down
+                type="date"
+                name="depatureDate"
+              )
           button.inner-button
             i.fa-solid.fa-magnifying-glass
             | Tìm kiếm
@@ -201,7 +204,7 @@ block main
         each item in tourListSection4
           +product-item(item)
       .inner-button
-        a.button-outline(href="#") Xem tất cả
+        a.button-outline(href="/category/tour-trong-nuoc" target="_blank") Xem tất cả
   // End section 4
 
 
@@ -225,7 +228,7 @@ block main
         each item in tourListSection6
           +product-item(item)
       .inner-button
-        a.button-outline(href="#") Xem tất cả
+        a.button-outline(href="/category/tour-nuoc-ngoai" target="_blank") Xem tất cả
   // End section 6
 
 
