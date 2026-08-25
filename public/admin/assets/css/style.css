@@ -1232,6 +1232,11 @@ a{
   cursor: pointer;
 }
 
+.section-8 form .inner-upload-image-multi .filepond--root{
+  width: 300px;
+  max-height: 600px;
+}
+
 /*End section 8 */
 
 /* Section 9 */

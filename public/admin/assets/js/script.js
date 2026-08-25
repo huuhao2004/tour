@@ -103,6 +103,41 @@ if (listFilepondImage.length > 0) {
 // End filepond image
 
 
+// Filepond multi
+const listFilepondImageMulti = document.querySelectorAll("[filepond-image-multi]");
+const filePondMulti = {}
+if (listFilepondImageMulti.length > 0) {
+  listFilepondImageMulti.forEach(item => {
+    FilePond.registerPlugin(
+      FilePondPluginImagePreview,
+      FilePondPluginFileValidateType,
+    );
+
+    //hiện thỉ ảnh
+    let files = null;
+    const elementListImageDefault = item.closest("[list-image-default]");
+    if (elementListImageDefault) {
+      let listImageDefault = elementListImageDefault.getAttribute("list-image-default");
+      if (listImageDefault) {
+        listImageDefault = JSON.parse(listImageDefault);
+        files = [];
+        listImageDefault.forEach(image => {
+          files.push({
+            source: image,
+          })
+        })
+      }
+    }
+
+    filePondMulti[item.name] = FilePond.create(item, {
+      labelIdle: "+",
+      files: files
+    });
+  })
+}
+// End filepond multi
+
+
 // Biểu đồ doanh thu
 const revenueChart = document.querySelector("#revenue-chart");
 if (revenueChart) {
@@ -353,6 +388,14 @@ if (tourCreateForm) {
       formData.append("departureDate", departureDate);
       formData.append("information", information);
       formData.append("schedules", JSON.stringify(schedules));
+
+      // images
+      if (filePondMulti.images.getFiles().length > 0) {
+        filePondMulti.images.getFiles().forEach(item => {
+          formData.append("images", item.file);
+        })
+      }
+      // end images
 
 
       const fetchApi = async () => {
@@ -1466,6 +1509,13 @@ if (tourEditForm) {
       formData.append("information", information);
       formData.append("schedules", JSON.stringify(schedules));
 
+      // images
+      if (filePondMulti.images.getFiles().length > 0) {
+        filePondMulti.images.getFiles().forEach(item => {
+          formData.append("images", item.file);
+        })
+      }
+      // end images
 
       const id = window.location.pathname.split("/").pop();
 

@@ -24,7 +24,7 @@ module.exports.verifyToken = async (req, res, next) => {
       res.clearCookie("token");
       res.redirect(`/${pathAdmin}/account/login`);
       return;
-    }
+    } 
 
     //lay ra ten nhom quyen cua account
     const role = await Role.findOne({

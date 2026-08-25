@@ -25,9 +25,24 @@ block main
             option(value="active" selected=(tourDetail.status=="active")) Hoạt động
             option(value="inactive" selected=(tourDetail.status=="inactive")) Dừng hoạt động
         .inner-group.inner-two-col
-          label(class="inner-label" for="avatar") Ảnh đại diện
+          label(class="inner-label" for="avatar") Ảnh đại diện 
           div(class="inner-upload-image" image-default=tourDetail.avatar)
             input(type="file" id="avatar" name="avatar" accept="image/*" filepond-image)
+        
+        .inner-group.inner-two-col
+          label(class="inner-label" for="images") Danh sách các ảnh
+          div(class="inner-upload-image-multi" list-image-default=tourDetail.images)
+            input(
+              type="file" 
+              multiple 
+              id="images" 
+              name="images" 
+              accept="image/*" 
+              data-allow-reorder="true"
+              filepond-image-multi
+            )
+        
+
         .inner-group
           label(class="inner-label") Giá cũ
           .inner-input-list 

@@ -140,7 +140,10 @@ module.exports.createPost = async (req, res) => {
 
   req.body.createdBy = req.account.id;
   req.body.updatedBy = req.account.id;
-  req.body.avatar = req.file ? req.file.path : "";
+
+  if (req.files && req.files.avatar && req.files.avatar.length > 0) {
+    req.body.avatar = req.files.avatar[0].path
+  } 
 
   req.body.priceAdult = req.body.priceAdult ? parseInt(req.body.priceAdult) : 0;
   req.body.priceChildren = req.body.priceChildren
@@ -169,6 +172,10 @@ module.exports.createPost = async (req, res) => {
     ? new Date(req.body.departureDate)
     : null;
   req.body.schedules = req.body.schedules ? JSON.parse(req.body.schedules) : [];
+
+  if (req.files && req.files.images && req.files.images.length > 0) {
+    req.body.images = req.files.images.map(file => file.path)
+  }
 
   const newTour = new Tour(req.body);
   await newTour.save();
@@ -256,8 +263,8 @@ module.exports.editPatch = async (req, res) => {
     req.body.createdBy = req.account.id;
     req.body.updatedBy = req.account.id;
 
-    if (req.file) {
-      req.body.avatar = req.file.path;
+    if (req.files && req.files.avatar && req.files.avatar.length > 0) {
+      req.body.avatar = req.files.avatar[0].path;
     } else {
       delete req.body.avatar; // xóa req.body.avatar khỏi req.body đẻ khỏi cập nhật thành ""
     }
@@ -298,6 +305,11 @@ module.exports.editPatch = async (req, res) => {
       ? JSON.parse(req.body.schedules)
       : [];
 
+    if (req.files && req.files.images && req.files.images.length > 0) {
+      req.body.images = req.files.images.map(file => file.path)
+    } else {
+      delete req.body.images; 
+    }
     await Tour.updateOne({ _id: id }, req.body);
 
     req.flash("success", "Sửa tour thành công!");
