@@ -480,3 +480,137 @@ if (miniCart) {
   miniCart.innerHTML = quantityCart;
 }
 //end mini cart
+
+//page cart
+
+const drawCart = () => {
+  const cart = localStorage.getItem("cart");
+
+  const fetchApi = async () => {
+    const response = await fetch(`/cart/detail`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: cart
+    });
+    const result = await response.json();
+    if (result.code == "success") {
+      //hien thi cac item ra giao dien
+      const htmlCart = result.cart.map(item => `
+        <div class="inner-tour-item">
+        <div class="inner-actions">
+          <button class="inner-delete">
+            <i class="fa-solid fa-x"></i>
+          </button>
+          <input class="inner-check" type="checkbox" />
+        </div>
+
+        <!-- Product Details -->
+        <div class="inner-product">
+          <div class="inner-image">
+            <a href="/tour/detail/${item.slug}">
+              <img alt="${item.name}" src="${item.avatar}" />
+            </a>
+          </div>
+          <div class="inner-content">
+            <div class="inner-title">
+              <a href="#">${item.name}</a>
+            </div>
+            <div class="inner-meta">
+              <div class="inner-meta-item">
+                Mã Tour: <b>123456789</b>
+              </div>
+              <div class="inner-meta-item">
+                Ngày Khởi Hành: <b>${item.departureDateFormat}</b>
+              </div>
+              <div class="inner-meta-item">
+                Khởi Hành Tại: <b>${item.locationFromName}</b>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Passenger Quantity -->
+        <div class="inner-quantity">
+          <div class="inner-label">Số Lượng Hành Khách</div>
+          <div class="inner-list">
+            <!-- Adult -->
+            <div class="inner-item">
+              <div class="inner-item-label">Người lớn:</div>
+              <div class="inner-item-input">
+                <input type="number" value="${item.quantityAdult}" min="1" max="${item.stockAdult}"/>
+              </div>
+              <div class="inner-item-price">
+                <span>${item.quantityAdult}</span>
+                <span>x</span>
+                <span class="inner-highlight">${item.priceNewAdult.toLocaleString("vi-VN")}</span>
+              </div>
+            </div>
+
+            <!-- Children -->
+            <div class="inner-item">
+              <div class="inner-item-label">Trẻ em:</div>
+              <div class="inner-item-input">
+                <input type="number" value="${item.quantityChildren}" min="0" max="${item.stockChildren}"/>
+              </div>
+              <div class="inner-item-price">
+                <span>${item.quantityChildren}</span>
+                <span>x</span>
+                <span class="inner-highlight">${item.priceNewChildren.toLocaleString("vi-VN")}</span>
+              </div>
+            </div>
+
+            <!-- Baby -->
+            <div class="inner-item">
+              <div class="inner-item-label">Em bé:</div>
+              <div class="inner-item-input">
+                <input type="number" value="${item.quantityBaby}" min="0" max="${item.stockBaby}"/>
+              </div>
+              <div class="inner-item-price">
+                <span>${item.quantityBaby}</span>
+                <span>x</span>
+                <span class="inner-highlight">${item.priceNewBaby.toLocaleString("vi-VN")}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      `)
+
+      const cartList = pageCart.querySelector("[cart-list]");
+      cartList.innerHTML = htmlCart.join("");
+
+      //cap nhat mini cart
+      miniCart.innerHTML = result.cart.length;
+
+      //cap nhat lai cart trong local storage
+      localStorage.setItem("cart", JSON.stringify(result.cart));
+
+      // //tinh tong tien
+      let subTotalPrice = 0;
+
+      for (const item of result.cart) {
+        subTotalPrice += item.priceNewAdult * item.quantityAdult + item.priceNewBaby * item.quantityBaby + item.priceNewChildren * item.quantityChildren;
+      }
+
+      const discount = 0;
+      const totalPrice = (subTotalPrice - discount * subTotalPrice) || 0;
+
+      const elementCartSubTotal = pageCart.querySelector("[cart-sub-total]");
+      const elementCartDiscount = pageCart.querySelector("[cart-discount]");
+      const elementCartTotal = pageCart.querySelector("[cart-total]");
+
+      elementCartSubTotal.innerHTML = subTotalPrice.toLocaleString("vi-VN");
+      elementCartDiscount.innerHTML = discount.toLocaleString("vi-VN");
+      elementCartTotal.innerHTML = totalPrice.toLocaleString("vi-VN");
+    }
+  }
+  fetchApi();
+}
+
+const pageCart = document.querySelector("[page-cart]");
+if (pageCart) {
+  drawCart();
+}
+//end page cart
