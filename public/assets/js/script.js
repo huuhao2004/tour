@@ -539,7 +539,7 @@ const drawCart = () => {
             <div class="inner-item">
               <div class="inner-item-label">Người lớn:</div>
               <div class="inner-item-input">
-                <input type="number" value="${item.quantityAdult}" min="1" max="${item.stockAdult}"/>
+                <input type="number" value="${item.quantityAdult}" min="1" max="${item.stockAdult}" name="quantityAdult" input-quantity tour-id=${item.tourId} />
               </div>
               <div class="inner-item-price">
                 <span>${item.quantityAdult}</span>
@@ -552,7 +552,7 @@ const drawCart = () => {
             <div class="inner-item">
               <div class="inner-item-label">Trẻ em:</div>
               <div class="inner-item-input">
-                <input type="number" value="${item.quantityChildren}" min="0" max="${item.stockChildren}"/>
+                <input type="number" value="${item.quantityChildren}" min="0" max="${item.stockChildren}" name="quantityChildren" input-quantity tour-id=${item.tourId} />
               </div>
               <div class="inner-item-price">
                 <span>${item.quantityChildren}</span>
@@ -565,7 +565,7 @@ const drawCart = () => {
             <div class="inner-item">
               <div class="inner-item-label">Em bé:</div>
               <div class="inner-item-input">
-                <input type="number" value="${item.quantityBaby}" min="0" max="${item.stockBaby}"/>
+                <input type="number" value="${item.quantityBaby}" min="0" max="${item.stockBaby}" name="quantityBaby" input-quantity tour-id=${item.tourId} />
               </div>
               <div class="inner-item-price">
                 <span>${item.quantityBaby}</span>
@@ -604,6 +604,22 @@ const drawCart = () => {
       elementCartSubTotal.innerHTML = subTotalPrice.toLocaleString("vi-VN");
       elementCartDiscount.innerHTML = discount.toLocaleString("vi-VN");
       elementCartTotal.innerHTML = totalPrice.toLocaleString("vi-VN");
+
+      //change sluong
+      const listInputQuantity = pageCart.querySelectorAll("[input-quantity]");
+      listInputQuantity.forEach(item => {
+        item.addEventListener("change", () => {
+          const tourId = item.getAttribute("tour-id");
+          const name = item.getAttribute("name");
+          const quantity = parseInt(item.value);
+          
+          const cart = JSON.parse(localStorage.getItem("cart"));
+          const itemUpdate = cart.find(y => y.tourId == tourId);
+          itemUpdate[name] = quantity;
+          localStorage.setItem("cart", JSON.stringify(cart));
+          drawCart();
+        })
+      })
     }
   }
   fetchApi();
