@@ -7,6 +7,10 @@ html
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css")
     link(rel="stylesheet", href="https://unpkg.com/filepond@^4/dist/filepond.css")
     link(rel="stylesheet", href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css")
+    
+    script.
+      const pathAdmin = "#{pathAdmin}"
+
     script(src="https://cdn.tiny.cloud/1/7n7wlxfit2x9eogbgw9i2d6h9ll9e35ffufq34a3457e71da/tinymce/7/tinymce.min.js" referrerpolicy="origin")
     script(src="/admin/assets/js/tinymce-config.js")
     title #{pageTitle}
@@ -25,9 +29,6 @@ html
 
     main.main
       block main
-
-    script.
-      const pathAdmin = "#{pathAdmin}"
 
     script(src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js")
     script(src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js")
