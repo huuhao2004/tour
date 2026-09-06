@@ -313,7 +313,7 @@ if (orderForm) {
           fullName,
           phone,
           note,
-          paymentMethoc: method,
+          paymentMethod: method,
           items: cart
         };
 

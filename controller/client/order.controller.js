@@ -1,6 +1,7 @@
 const generateHelper = require("../../helpers/generate.helper");
 const Order = require("../../models/order.model");
 const Tour = require("../../models/tour.model");
+const moment = require("moment");
 
 module.exports.createPost = async (req, res) => {
   //mã đơn hàng
@@ -51,4 +52,70 @@ module.exports.createPost = async (req, res) => {
     message: "Đặt hàng thành công!",
     orderCode: req.body.code
   })
+}
+
+module.exports.success = async (req, res) => {
+  const { orderCode, phone } = req.query;
+
+  const orderDetail = await Order.findOne({
+    code: orderCode,
+    phone: phone
+  });
+
+  if (orderDetail) {
+    switch (orderDetail.paymentMethod) {
+      case "money":
+        orderDetail.paymentMethodName = "Thanh toán bằng tiền mặt"
+        break;
+      case "momo":
+        orderDetail.paymentMethodName = "Ví momo"
+        break;
+      case "bank":
+        orderDetail.paymentMethodName = "Chuyển khoản ngân hàng"
+        break;
+    }
+    switch (orderDetail.paymentStatus) {
+      case "unpaid":
+        orderDetail.paymentStatusName = "Chưa thanh toán"
+        break;
+      case "paid":
+        orderDetail.paymentStatusName = "Đã thanh toán"
+        break;
+    }
+    switch (orderDetail.status) {
+      case "initial":
+        orderDetail.statusName = "Khởi tạo"
+        break;
+      case "done":
+        orderDetail.statusName = "Hoàn thành"
+        break;
+      case "cancle":
+        orderDetail.statusName = "Hủy"
+        break;
+    }
+
+    orderDetail.createdAtFormat = moment(orderDetail.createdAt).format("HH:mm - DD/MM/YYYY");
+
+    for (const item of orderDetail.items) {
+      const tourInfo = await Tour.findOne({
+        _id: item.tourId
+      })
+      if (tourInfo) {
+        item.avatar = tourInfo.avatar;
+        item.name = tourInfo.name;
+        item.slug = tourInfo.slug;
+        item.departureDateFormat = moment(item.departureDate).format("DD/MM/YYYY");
+      };
+
+    }
+
+    res.render("client/pages/order-success", {
+      pageTitle: "Đặt hàng thành công!",
+      orderDetail
+    });
+  } else {
+    res.redirect("/")
+  }
+
+
 }
