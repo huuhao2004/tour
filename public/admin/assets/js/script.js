@@ -459,6 +459,35 @@ if (orderEditForm) {
       const paymentMethod = event.target.paymentMethod.value;
       const paymentStatus = event.target.paymentStatus.value;
       const status = event.target.status.value;
+
+      const dataFinal = {
+        fullName,
+        phone,
+        note,
+        paymentMethod,
+        paymentStatus,
+        status
+      };
+      const id = window.location.pathname.split("/").pop();
+      const fetchApi = async () => {
+        const response = await fetch(`/${pathAdmin}/order/edit/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dataFinal)
+        });
+        const result = await response.json();
+        if (result.code == "error") {
+          alert(result.message);
+        }
+        if (result.code == "success") {
+          window.location.reload();
+        }
+      };
+
+      fetchApi();
+    
     });
 }
 // End order form edit

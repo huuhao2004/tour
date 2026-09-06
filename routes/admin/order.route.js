@@ -3,7 +3,9 @@ const oderController = require("../../controller/admin/order.controller");
 
 router.get("/list", oderController.list);
 
-router.get("/edit", oderController.edit);
+router.get("/edit/:id", oderController.edit);
+
+router.patch("/edit/:id", oderController.editPatch)
 
 
 module.exports = router;
