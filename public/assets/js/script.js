@@ -288,8 +288,62 @@ if (orderForm) {
     .onSuccess((event) => {
       const fullName = event.target.fullName.value;
       const phone = event.target.phone.value;
+      const note = event.target.note.value;
       const method = event.target.method.value;
-      console.log(method);
+
+      let cart = JSON.parse(localStorage.getItem("cart"));
+      //lay ra nhung tour da check , va sl > 0
+      cart = cart.filter(item => {
+        return (item.checked == true && (item.quantityAdult + item.quantityChildren + item.quantityBaby > 0))
+      });
+
+      //loai bo cac truong k can thiet
+      cart = cart.map(item => {
+        return {
+          tourId: item.tourId,
+          quantityAdult: item.quantityAdult,
+          quantityChildren: item.quantityChildren,
+          quantityBaby: item.quantityBaby,
+          locationFromName: item.locationFromName,
+        }
+      })
+
+      if (cart.length > 0) {
+        const dataFinal = {
+          fullName,
+          phone,
+          note,
+          paymentMethoc: method,
+          items: cart
+        };
+
+        const fetchApi = async () => {
+          const response = await fetch("/order/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataFinal)
+          });
+
+          const result = await response.json();
+
+          if (result.code == "error") {
+            alert(result.message)
+          }
+          if (result.code == "success") {
+            //cap nhat lai gio hang
+            let cart = JSON.parse(localStorage.getItem("cart"));
+            cart = cart.filter(item => item.checked == false);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            //chuyen sang trang dat hang thanh cong
+            window.location.href = `/order/success?orderCode=${result.orderCode}&phone=${phone}`;
+          }
+        };
+
+        fetchApi();
+      };
+
     });
 
   // List input method
