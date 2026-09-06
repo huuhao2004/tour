@@ -42,7 +42,7 @@ module.exports.createPost = async (req, res) => {
   //trang thai thanh toan
   req.body.paymentStatus = "unpaid"; //unpaid = chua thanh toan, paid: da thanh toan
   //trang thai don hang
-  req.body.status = "initial"; //initital, done, cancle
+  req.body.status = "initial"; //initital, done, cancel
 
   const newRecord = new Order(req.body);
   await newRecord.save();
@@ -89,7 +89,7 @@ module.exports.success = async (req, res) => {
       case "done":
         orderDetail.statusName = "Hoàn thành"
         break;
-      case "cancle":
+      case "cancel":
         orderDetail.statusName = "Hủy"
         break;
     }
