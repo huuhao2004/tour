@@ -349,6 +349,9 @@ if (orderForm) {
               case "zalopay":
                 window.location.href = `/order/payment-zalopay?orderCode=${result.orderCode}`
                 break;
+              case "vnpay":
+                window.location.href = `/order/payment-vnpay?orderCode=${result.orderCode}`
+                break;
             }
           }
         };
