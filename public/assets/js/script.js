@@ -336,8 +336,20 @@ if (orderForm) {
             let cart = JSON.parse(localStorage.getItem("cart"));
             cart = cart.filter(item => item.checked == false);
             localStorage.setItem("cart", JSON.stringify(cart));
-            //chuyen sang trang dat hang thanh cong
-            window.location.href = `/order/success?orderCode=${result.orderCode}&phone=${phone}`;
+
+            switch (method) {
+              case "money":
+                //chuyen sang trang dat hang thanh cong
+                window.location.href = `/order/success?orderCode=${result.orderCode}&phone=${phone}`;
+                break;
+              case "bank":
+                //chuyen sang trang dat hang thanh cong
+                window.location.href = `/order/success?orderCode=${result.orderCode}&phone=${phone}`;
+                break;
+              case "zalopay":
+                window.location.href = `/order/payment-zalopay?orderCode=${result.orderCode}`
+                break;
+            }
           }
         };
 

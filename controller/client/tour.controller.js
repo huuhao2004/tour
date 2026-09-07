@@ -55,7 +55,7 @@ module.exports.detail = async (req, res) => {
     })
 
     //thong tin chi tiet
-    tourDetail.departureDateFormat = moment(tourDetail.departureDate).format('DD/MM/YYYY');
+    tourDetail.departureDateFormat = moment(new Date(tourDetail.departureDate)).format('DD/MM/YYYY');
 
     const cityList = await City.find({
       _id: {

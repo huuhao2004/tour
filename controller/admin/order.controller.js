@@ -28,6 +28,9 @@ module.exports.list = async (req, res) => {
       case "momo":
         orderDetail.paymentMethodName = "Ví momo"
         break;
+      case "zalopay":
+        orderDetail.paymentMethodName = "Zalo pay"
+        break;
       case "bank":
         orderDetail.paymentMethodName = "Chuyển khoản ngân hàng"
         break;
