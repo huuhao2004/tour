@@ -13,20 +13,20 @@ block main
         .inner-icon 
           img(src="/admin/assets/images/section-1-icon1.png")
         .inner-content
-          .inner-title Đơn hàng 
-          .inner-number 1.200
+          .inner-title Người dùng
+          .inner-number #{overview.totalUser.toLocaleString("vi-VN")}
       .inner-item 
         .inner-icon 
           img(src="/admin/assets/images/section-1-icon2.png")
         .inner-content
-          .inner-title Người dùng 
-          .inner-number 3.600
+          .inner-title Đơn hàng
+          .inner-number #{overview.totalOrder.toLocaleString("vi-VN")}
       .inner-item 
         .inner-icon 
           img(src="/admin/assets/images/section-1-icon3.png")
         .inner-content
           .inner-title Doanh thu
-          .inner-number 300.000.000đ
+          .inner-number #{overview.totalRevenue.toLocaleString("vi-VN")}đ
     //- End Section 1
 
     //- Section 2
